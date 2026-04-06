@@ -1,0 +1,154 @@
+{
+  "moduleId": 1,
+  "title": "קו ישר ושיפוע",
+  "color": "emerald",
+  "icon": "📈",
+  "steps": [
+    {
+      "stepId": 0,
+      "type": "stepping-graph",
+      "title": "בניית קו צעד-אחר-צעד",
+      "subtitle": "לחצו להוסיף נקודות — ראו כיצד קצב קבוע יוצר קו ישר",
+      "mascotText": "כל לחיצה מוסיפה צעד! שימו לב — תמיד +1 ימינה, +5 למעלה.",
+      "controls": [],
+      "showGuide": true
+    },
+    {
+      "stepId": 1,
+      "type": "visual-slider",
+      "title": "שחקו עם השיפוע",
+      "subtitle": "הזיזו את המחוון — בלי נוסחאות עדיין, רק תחושה",
+      "mascotText": "לפני שמסבירים כלום — בואו תשחקו ותגלו לבד! 🎮",
+      "controls": [
+        { "id": "m", "label": "כוח השינוי", "min": -4, "max": 4, "step": 0.5, "defaultValue": 1, "color": "emerald" }
+      ]
+    },
+    {
+      "stepId": 2,
+      "type": "formula-reveal",
+      "title": "הנוסחה שמסתתרת מאחורי הקו",
+      "subtitle": "כל קו ישר כתוב כך — בואו נפרק:",
+      "mascotText": "עכשיו שגיליתם את הרעיון — הנה איך מתמטיקאים כותבים את זה!",
+      "formulaVariant": "linear",
+      "controls": []
+    },
+    {
+      "stepId": 3,
+      "type": "simulator",
+      "title": "שיפוע + חיתוך: שני מחוונים",
+      "subtitle": "הזיזו את m ו-b — ראו את שני הכוחות ביחד",
+      "mascotText": "m = כמה תלול? b = איפה מתחיל? שחקו יחד!",
+      "controls": [
+        { "id": "m", "label": "שיפוע (m)", "min": -5, "max": 5, "step": 0.5, "defaultValue": 1, "color": "emerald" },
+        { "id": "b", "label": "חיתוך Y (b)", "min": -8, "max": 8, "step": 1, "defaultValue": 0, "color": "sky" }
+      ],
+      "showGuide": false
+    },
+    {
+      "stepId": 4,
+      "type": "target-drill",
+      "title": "משימה: פגעו בכוכבים! ⭐",
+      "subtitle": "הזיזו m ו-b עד שהקו יעבור דרך שני הכוכבים",
+      "mascotText": "כוונו את הקו לכוכבים! m שולט על התלילות, b על הגובה.",
+      "controls": [
+        { "id": "m", "label": "שיפוע (m)", "min": -5, "max": 5, "step": 0.5, "defaultValue": 0, "color": "emerald" },
+        { "id": "b", "label": "חיתוך Y (b)", "min": -10, "max": 10, "step": 1, "defaultValue": 0, "color": "sky" }
+      ],
+      "showGuide": true
+    },
+    {
+      "stepId": 5,
+      "type": "identify-drill",
+      "title": "מי כאן קו ישר?",
+      "subtitle": "לחצו על 4 הגרפים שמציגים קצב קבוע",
+      "mascotText": "מסדר זיהוי! מצאו את 4 הגרפים שיש להם קצב שינוי קבוע."
+    },
+    {
+      "stepId": 6,
+      "type": "match-drill",
+      "title": "שייכו משוואה לגרף",
+      "subtitle": "לחצו על משוואה ואז על הגרף המתאים — ללא רמז צבע!",
+      "mascotText": "כל גרף מייצג משוואה אחת — חשבו! אין רמזי צבע הפעם 🧠"
+    },
+    {
+      "stepId": 7,
+      "type": "slope-formula",
+      "title": "נוסחת השיפוע",
+      "subtitle": "שינוי ב-Y חלקי שינוי ב-X — למה זה עובד?",
+      "mascotText": "הגשר הקריטי: עכשיו נבין איך מחשבים שיפוע מכל שתי נקודות!"
+    },
+    {
+      "stepId": 8,
+      "type": "leitner-quiz",
+      "title": "מבדק לייטנר",
+      "subtitle": "8 שאלות — בחרו תשובה, אל תקלידו",
+      "mascotText": "בואו נבדוק מה למדתם! 🎯",
+      "questions": [
+        {
+          "id": "m1q1",
+          "type": "mcq",
+          "prompt": "מה השיפוע של y = 4x - 2?",
+          "options": ["4", "-2", "2", "-4"],
+          "correct": 0,
+          "hint": "m הוא המקדם שכופל את x"
+        },
+        {
+          "id": "m1q2",
+          "type": "mcq",
+          "prompt": "מה חיתוך Y של y = -3x + 7?",
+          "options": ["-3", "7", "3", "-7"],
+          "correct": 1,
+          "hint": "b הוא המספר הנוסף — מה y כש-x=0?"
+        },
+        {
+          "id": "m1q3",
+          "type": "mcq",
+          "prompt": "מה השיפוע בין (0,2) ל-(4,10)?",
+          "options": ["2", "3", "½", "-2"],
+          "correct": 0,
+          "hint": "שינוי Y = 10-2 = 8 | שינוי X = 4-0 = 4 | m = 8÷4 = 2"
+        },
+        {
+          "id": "m1q4",
+          "type": "mcq",
+          "prompt": "y = -2x + 1 — איזה גרף?",
+          "options": ["יורד, חיתוך Y=1", "עולה, חיתוך Y=1", "אופקי", "יורד, חיתוך Y=-2"],
+          "correct": 0,
+          "hint": "m<0 = יורד. b=1 = חיתוך Y ב-1"
+        },
+        {
+          "id": "m1q5",
+          "type": "mcq",
+          "prompt": "קו עם שיפוע 2 שחוצה Y ב-3 — מה המשוואה?",
+          "options": ["y = 2x + 3", "y = 3x + 2", "y = 2x - 3", "y = 3x - 2"],
+          "correct": 0,
+          "hint": "m=2, b=3 → y=2x+3"
+        },
+        {
+          "id": "m1q6",
+          "type": "mcq",
+          "prompt": "מה השיפוע בין (1,3) ל-(5,11)?",
+          "options": ["2", "4", "½", "-2"],
+          "correct": 0,
+          "hint": "שינוי Y = 11-3 = 8 | שינוי X = 5-1 = 4 | m = 8÷4 = 2"
+        },
+        {
+          "id": "m1q7",
+          "type": "mcq",
+          "prompt": "מה השיפוע בין (-2,6) ל-(2,-2)?",
+          "options": ["-2", "2", "-½", "4"],
+          "correct": 0,
+          "hint": "שינוי Y = -2-6 = -8 | שינוי X = 2-(-2) = 4 | m = -8÷4 = -2"
+        },
+        {
+          "id": "m1q8",
+          "type": "mcq",
+          "prompt": "איזה קו עובר דרך (0,1) ו-(2,5)?",
+          "options": ["y = 2x + 1", "y = x + 1", "y = 2x + 3", "y = 3x + 1"],
+          "correct": 0,
+          "hint": "m = (5-1)÷(2-0) = 2, b = y כש-x=0 → b=1"
+        }
+      ]
+    }
+  ]
+}

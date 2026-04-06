@@ -1,0 +1,138 @@
+{
+  "moduleId": 2,
+  "title": "פרבולה ריבועית",
+  "color": "amber",
+  "icon": "🔵",
+  "steps": [
+    {
+      "stepId": 0,
+      "type": "impossible-challenge",
+      "title": "המשימה הבלתי אפשרית 🚨",
+      "subtitle": "נסו לכוון קו ישר שעובר דרך 4 הכוכבים — האם אפשרי?",
+      "mascotText": "נסו ונסו — ותגלו שיש דברים שקו ישר פשוט לא יכול לעשות! עכשיו בואו נלמד למה צריך פרבולה."
+    },
+    {
+      "stepId": 1,
+      "type": "x2-reminder",
+      "title": "תזכורת: x² תמיד אי-שלילי",
+      "subtitle": "הבסיס של כל פרבולה — הבינו את זה ותבינו הכל",
+      "mascotText": "לא משנה מה x — ריבועו תמיד ≥ 0. זו הסיבה שפרבולה תמיד 'חיוכית' מלמטה (כשa>0)!"
+    },
+    {
+      "stepId": 2,
+      "type": "visual-slider",
+      "title": "הכוח של הריבוע — מקדם a בלבד",
+      "subtitle": "הקצה נעול ב-0. שנו את a וראו מה קורה לצורה",
+      "mascotText": "הקודקוד נשאר ב-(0,0) — רק a משתנה. שימו לב: a גדול = צרה יותר, a קטן = רחבה יותר!",
+      "controls": [
+        { "id": "a", "label": "מקדם a", "min": -3, "max": 3, "step": 0.5, "defaultValue": 1, "color": "amber" }
+      ]
+    },
+    {
+      "stepId": 3,
+      "type": "formula-reveal",
+      "title": "הנוסחה המלאה של הפרבולה",
+      "subtitle": "שלושה מקדמים, שלוש שליטות",
+      "mascotText": "שלושה מקדמים, שלוש שליטות! כל אחד עושה משהו אחר.",
+      "formulaVariant": "parabola-full",
+      "controls": []
+    },
+    {
+      "stepId": 4,
+      "type": "simulator",
+      "title": "סימולטור פרבולה — שלושה מחוונים",
+      "subtitle": "שנו כל מקדם ובדקו מה קורה לגרף",
+      "mascotText": "שחקו עם שלושת המחוונים וגלו מה כל מקדם עושה!",
+      "controls": [
+        { "id": "a", "label": "מקדם a", "min": -3, "max": 3, "step": 0.5, "defaultValue": 1, "color": "amber" },
+        { "id": "b", "label": "מקדם b", "min": -5, "max": 5, "step": 1, "defaultValue": 0, "color": "purple" },
+        { "id": "c", "label": "מקדם c", "min": -5, "max": 5, "step": 1, "defaultValue": 0, "color": "sky" }
+      ],
+      "showGuide": true
+    },
+    {
+      "stepId": 5,
+      "type": "target-drill",
+      "title": "תרגול ראשון: פגעו בכוכבים! ⭐",
+      "subtitle": "כוונו את הפרבולה לעבור דרך שלושת הכוכבים",
+      "mascotText": "a שולט על הפה של הפרבולה, c מעלה ומוריד הכל! b מזיז לצדדים.",
+      "controls": [
+        { "id": "a", "label": "מקדם a", "min": -2, "max": 2, "step": 0.5, "defaultValue": 1, "color": "amber" },
+        { "id": "b", "label": "מקדם b", "min": -4, "max": 4, "step": 1, "defaultValue": 0, "color": "purple" },
+        { "id": "c", "label": "מקדם c", "min": -5, "max": 5, "step": 1, "defaultValue": 0, "color": "sky" }
+      ],
+      "showGuide": true
+    },
+    {
+      "stepId": 6,
+      "type": "formula-reveal",
+      "title": "נוסחת הקודקוד",
+      "subtitle": "הנקודה הגבוהה (או הנמוכה) ביותר של הפרבולה",
+      "mascotText": "הנקודה הכי גבוהה (או הכי נמוכה) של הפרבולה — יש לה נוסחה מדויקת!",
+      "formulaVariant": "vertex",
+      "controls": []
+    },
+    {
+      "stepId": 7,
+      "type": "real-math",
+      "title": "תרגיל מתמטי אמיתי",
+      "subtitle": "y = x² - 4x + 3 — מצאו את כל המידע",
+      "mascotText": "בואו נפעיל את כל מה שלמדנו על משוואה אחת!",
+      "controls": []
+    },
+    {
+      "stepId": 8,
+      "type": "match-drill",
+      "title": "שייכו משוואה לפרבולה",
+      "subtitle": "גררו כל משוואה לגרף שמתאים לה",
+      "mascotText": "כל פרבולה מייצגת משוואה אחת — מצאו את ההתאמות!"
+    },
+    {
+      "stepId": 9,
+      "type": "leitner-quiz",
+      "title": "מבדק לייטנר",
+      "subtitle": "5 שאלות על הפרבולה",
+      "mascotText": "בואו נבדוק מה למדתם! 🎯",
+      "questions": [
+        {
+          "id": "m2q1",
+          "type": "mcq",
+          "prompt": "ב-y = -2x² + 3 — לאיזה כיוון הפרבולה פתוחה?",
+          "options": ["למטה (עצוב 😢)", "למעלה (שמח 😊)", "ישר", "לא ניתן לדעת"],
+          "correct": 0,
+          "hint": "a=-2 — שלילי = פתוחה למטה = עצובה"
+        },
+        {
+          "id": "m2q2",
+          "type": "input",
+          "prompt": "מה ה-x של הקודקוד של y = x² − 6x + 5?",
+          "correct": "3",
+          "hint": "x_v = −b ÷ (2a) = −(−6) ÷ (2·1) = 6 ÷ 2 = 3"
+        },
+        {
+          "id": "m2q3",
+          "type": "mcq",
+          "prompt": "מה חיתוך ציר Y של y = x² + 4?",
+          "options": ["0", "4", "-4", "2"],
+          "correct": 1,
+          "hint": "חיתוך Y = c. מציבים x=0: y = 0 + 4 = 4"
+        },
+        {
+          "id": "m2q4",
+          "type": "input",
+          "prompt": "מה ה-y של הקודקוד של y = x² − 4x + 3?",
+          "correct": "-1",
+          "hint": "x_v = 4÷2 = 2. עכשיו מציבים: y = 2²−4·2+3 = 4−8+3 = −1. שים לב: x_v=2 אבל y_v=−1!"
+        },
+        {
+          "id": "m2q5",
+          "type": "mcq",
+          "prompt": "אם a>0 — הקודקוד הוא:",
+          "options": ["מינימום", "מקסימום", "תלוי ב-b", "תלוי ב-c"],
+          "correct": 0,
+          "hint": "a>0 = פרבולה מחייכת = הקודקוד הכי נמוך = מינימום"
+        }
+      ]
+    }
+  ]
+}
