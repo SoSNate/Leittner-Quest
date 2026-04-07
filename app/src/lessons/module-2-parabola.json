@@ -39,6 +39,13 @@
     },
     {
       "stepId": 4,
+      "type": "practice-mini",
+      "title": "תרגול ויזואלי: זיהוי פרבולה",
+      "subtitle": "3 שאלות — קראו גרף פרבולה, זהו את a ואת הכיוון",
+      "mascotText": "ראיתם את הנוסחה — עכשיו זהו פרבולות מגרפים! 🔵"
+    },
+    {
+      "stepId": 5,
       "type": "simulator",
       "title": "סימולטור פרבולה — שלושה מחוונים",
       "subtitle": "שנו כל מקדם ובדקו מה קורה לגרף",
@@ -51,7 +58,7 @@
       "showGuide": true
     },
     {
-      "stepId": 5,
+      "stepId": 6,
       "type": "target-drill",
       "title": "תרגול ראשון: פגעו בכוכבים! ⭐",
       "subtitle": "כוונו את הפרבולה לעבור דרך שלושת הכוכבים",
@@ -64,7 +71,7 @@
       "showGuide": true
     },
     {
-      "stepId": 6,
+      "stepId": 7,
       "type": "formula-reveal",
       "title": "נוסחת הקודקוד",
       "subtitle": "הנקודה הגבוהה (או הנמוכה) ביותר של הפרבולה",
@@ -73,7 +80,14 @@
       "controls": []
     },
     {
-      "stepId": 7,
+      "stepId": 8,
+      "type": "practice-mini",
+      "title": "תרגול: חישוב קודקוד",
+      "subtitle": "3 שאלות — מצאו x ו-y של הקודקוד",
+      "mascotText": "למדתם את נוסחת הקודקוד — עכשיו תרגלו אותה! 🎯"
+    },
+    {
+      "stepId": 9,
       "type": "real-math",
       "title": "תרגיל מתמטי אמיתי",
       "subtitle": "y = x² - 4x + 3: מצאו את כל המידע",
@@ -81,14 +95,14 @@
       "controls": []
     },
     {
-      "stepId": 8,
+      "stepId": 10,
       "type": "match-drill",
       "title": "שייכו משוואה לפרבולה",
       "subtitle": "גררו כל משוואה לגרף שמתאים לה",
       "mascotText": "כל פרבולה מייצגת משוואה אחת — מצאו את ההתאמות!"
     },
     {
-      "stepId": 9,
+      "stepId": 11,
       "type": "leitner-quiz",
       "title": "מבדק לייטנר",
       "subtitle": "5 שאלות על הפרבולה",

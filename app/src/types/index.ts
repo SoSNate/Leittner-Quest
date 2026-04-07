@@ -11,7 +11,8 @@ export type StepType =
   | 'impossible-challenge'
   | 'match-drill'
   | 'x2-reminder'
-  | 'slope-formula';
+  | 'slope-formula'
+  | 'practice-mini';
 
 export interface SliderConfig {
   id: string;

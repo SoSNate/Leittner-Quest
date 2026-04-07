@@ -11,6 +11,7 @@ import ImpossibleChallenge from '../steps/ImpossibleChallenge';
 import MatchDrill from '../steps/MatchDrill';
 import SlopeFormula from '../steps/SlopeFormula';
 import LiveEquation from '../ui/LiveEquation';
+import PracticeMode from '../practice/PracticeMode';
 
 interface Props {
   lesson: Lesson;
@@ -314,8 +315,13 @@ export default function ModulePlayer({ lesson, onBack }: Props) {
           <LeitnerEngine moduleId={lesson.moduleId} questions={step.questions} onComplete={handleComplete} />
         )}
 
-        {/* Nav buttons — prev always visible (except leitner-quiz), next only for self-contained step types */}
-        {step.type !== 'leitner-quiz' && (
+        {/* ─── practice-mini (embedded visual practice after theory blocks) ─── */}
+        {step.type === 'practice-mini' && (
+          <PracticeMode moduleId={lesson.moduleId} onBack={nextStep} darkMode={isDark} embedded questionCount={3} />
+        )}
+
+        {/* Nav buttons — hidden for self-contained steps that navigate themselves */}
+        {step.type !== 'leitner-quiz' && step.type !== 'practice-mini' && (
           <div className="flex justify-between mt-6">
             <button
               onClick={prevStep}

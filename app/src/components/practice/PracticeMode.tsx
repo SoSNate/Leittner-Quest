@@ -1,17 +1,30 @@
 ﻿import React, { useState, useCallback } from 'react';
 import { useAppStore } from '../../store/useAppStore';
+import KaTeXDisplay from '../ui/KaTeXDisplay';
 
-// Splits Hebrew+math text and wraps math expressions as dir="ltr"
+// Convert plain-text math to LaTeX for KaTeX rendering
+function toLatex(s: string): string {
+  return s
+    .replace(/²/g, '^{2}')
+    .replace(/³/g, '^{3}')
+    // Simple a÷b → \frac{a}{b}
+    .replace(/(-?[\w.]+)\s*÷\s*(-?[\w.]+)/g, (_m, a, b) => `\\frac{${a}}{${b}}`)
+    // Unicode minus → ASCII minus (KaTeX handles both)
+    .replace(/−/g, '-')
+    .replace(/×/g, '\\times')
+    .replace(/·/g, '\\cdot');
+}
+
+// Splits Hebrew+math text — math parts rendered via KaTeX
 function renderPrompt(text: string): React.ReactNode {
   // Match: full equations (y = 2x + 2), coordinate pairs ((-3,4)), slope values (m=-1)
-  // Stop equation match only at ? ! , | — allow spaces inside (for "2x + 2")
   const mathRe = /(\([^)]+\)|[a-zA-Z]\s*=\s*[^?!،|,]+|m\s*=\s*[-\d.]+)/g;
   const parts: React.ReactNode[] = [];
   let last = 0;
   let match: RegExpExecArray | null;
   while ((match = mathRe.exec(text)) !== null) {
     if (match.index > last) parts.push(<span key={last}>{text.slice(last, match.index)}</span>);
-    parts.push(<span key={match.index} dir="ltr" className="inline font-mono">{match[0]}</span>);
+    parts.push(<KaTeXDisplay key={match.index} tex={toLatex(match[0].trim())} className="mx-0.5 align-middle" />);
     last = match.index + match[0].length;
   }
   if (last < text.length) parts.push(<span key={last}>{text.slice(last)}</span>);
@@ -845,11 +858,14 @@ interface Props {
   moduleId: number;
   onBack: () => void;
   darkMode: boolean;
+  embedded?: boolean;     // show as inline card, no full-screen header
+  questionCount?: number; // default: 8 for full, 3 for embedded
 }
 
-export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: Props) {
+export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode, embedded = false, questionCount }: Props) {
+  const count = questionCount ?? (embedded ? 3 : 8);
   const updateBox = useAppStore((s) => s.updateBox);
-  const [questions] = useState(() => generateQuestions(moduleId));
+  const [questions] = useState(() => generateQuestions(moduleId, count));
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState('');
@@ -902,6 +918,28 @@ export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: 
 
   if (done) {
     const pct100 = Math.round((score / questions.length) * 100);
+
+    // Embedded mode: compact result card, "continue" goes to next module step
+    if (embedded) {
+      return (
+        <div className="bg-white dark:bg-[#1c1b1f] rounded-2xl border border-[#e0dbe3] dark:border-slate-700 p-6 text-center space-y-4" dir="rtl">
+          <div className="text-4xl">{pct100 >= 80 ? '🏆' : pct100 >= 50 ? '👍' : '💪'}</div>
+          <p className="font-black text-lg text-[#2f2e32] dark:text-slate-100">
+            {pct100 >= 80 ? 'מצוין!' : pct100 >= 50 ? 'לא רע!' : 'נסו שוב!'}
+          </p>
+          <p className="text-3xl font-black" style={{ color: '#34d399' }}>{score}/{questions.length}</p>
+          <div className="h-2 bg-[#ebe7ed] dark:bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-full rounded-full" style={{ width: `${pct100}%`, background: pct100 >= 80 ? '#34d399' : pct100 >= 50 ? '#f59e0b' : '#f87171' }} />
+          </div>
+          <button onClick={onBack}
+            className="w-full font-black py-3 rounded-xl"
+            style={{ minHeight: 44, background: '#fde403', color: '#484000' }}>
+            המשך לשלב הבא ←
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] flex flex-col items-center justify-center p-6" dir="rtl">
         <div className="max-w-md w-full bg-white dark:bg-[#1c1b1f] rounded-2xl border border-[#e0dbe3] dark:border-slate-700 p-8 text-center space-y-5">
@@ -926,6 +964,66 @@ export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: 
             </button>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  // ─── Embedded mode (inline within module) ───────────────────────
+  if (embedded) {
+    return (
+      <div className="space-y-4 animate-fade-up" dir="rtl">
+        {/* Progress bar */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-1.5 bg-[#ebe7ed] dark:bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: 'linear-gradient(90deg,#34d399,#38bdf8)' }} />
+          </div>
+          <span className="text-xs text-[#78767b] dark:text-slate-500 font-bold whitespace-nowrap">{currentIdx + 1}/{questions.length}</span>
+        </div>
+
+        {/* Question card */}
+        <div className="bg-white dark:bg-[#1c1b1f] rounded-2xl border border-[#e0dbe3] dark:border-slate-700 p-5">
+          {q?.visualConfig && <MiniGraph config={q.visualConfig} darkMode={_darkMode} />}
+          <p className="font-bold text-base text-right mb-4 text-[#2f2e32] dark:text-slate-100" dir="rtl">
+            {renderPrompt(q.prompt)}
+          </p>
+          {isMCQ && q?.options && (
+            <div className="flex flex-col gap-2">
+              {q.options.map((opt, i) => {
+                let style = 'border-[#e0dbe3] dark:border-slate-600 text-[#2f2e32] dark:text-slate-200 hover:border-[#34d399]';
+                if (answered) {
+                  if (i === q.correct) style = 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300';
+                  else if (i === selected) style = 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300';
+                  else style = 'border-[#e0dbe3] dark:border-slate-700 opacity-40';
+                }
+                return (
+                  <button key={i} onClick={() => handleSelect(i)} disabled={answered}
+                    className={`w-full border-2 rounded-xl px-4 py-2.5 font-semibold transition-all disabled:cursor-default text-sm ${style}`}
+                    style={{ minHeight: 44 }}
+                    dir={/^[a-zA-Z=\-\d\s().+*]+$/.test(opt.trim()) ? 'ltr' : 'rtl'}>
+                    {renderPrompt(opt)}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          {isInput && (
+            <InputAnswer placeholder={q?.inputPlaceholder} onSubmit={handleInputSubmit} answered={answered} />
+          )}
+        </div>
+
+        {answered && (
+          <div className="space-y-2 animate-fade-up">
+            <div className={`rounded-xl px-4 py-3 text-sm text-right ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300' : 'bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-amber-700 dark:text-amber-300'}`}>
+              {isCorrect ? '✅ נכון! ' : '❌ לא נכון. '}
+              <span dir="ltr" className="inline font-mono text-xs">{q.explanation}</span>
+            </div>
+            <button onClick={next}
+              className="w-full font-black py-3 rounded-xl transition-all hover:-translate-y-0.5"
+              style={{ minHeight: 44, background: '#fde403', color: '#484000' }}>
+              {currentIdx + 1 >= questions.length ? 'סיום ←' : 'שאלה הבאה ←'}
+            </button>
+          </div>
+        )}
       </div>
     );
   }
