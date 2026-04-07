@@ -5,9 +5,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // Primary: Merriweather (elegant, mathematical, serif), Heebo as Hebrew fallback
-        sans: ['Merriweather', 'Heebo', 'serif'],
-        heebo: ['Heebo', 'Merriweather', 'serif'],
+        // Primary: Nunito (rounded, friendly, great for learning), Heebo as Hebrew fallback
+        sans: ['Nunito', 'Heebo', 'ui-sans-serif', 'sans-serif'],
+        heebo: ['Heebo', 'Nunito', 'sans-serif'],
         // Math / code: monospace stack used for all LTR formula display
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },

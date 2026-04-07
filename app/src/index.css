@@ -9,7 +9,7 @@
   --robot-bubble-bg: #f4eff5;
 
   /* Typography scale */
-  --font-sans: 'Merriweather', 'Heebo', serif;
+  --font-sans: 'Nunito', 'Heebo', ui-sans-serif, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Hebrew-optimised line-height (tighter ascenders/descenders) */
@@ -26,7 +26,7 @@
     font-family: var(--font-sans);
     font-size: 16px;
     line-height: var(--lh-base);
-    /* Enable OT features: kerning + ligatures for Merriweather/Heebo */
+    /* Enable OT features: kerning + ligatures for Nunito/Heebo */
     font-feature-settings: 'kern' 1, 'liga' 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
