@@ -1,4 +1,4 @@
-import { QUESTION_TOPICS, ALL_TOPIC_IDS, topicBoxLevels, heatColor } from '../analytics/engine';
+﻿import { QUESTION_TOPICS, ALL_TOPIC_IDS, topicBoxLevels, heatColor } from '../analytics/engine';
 import type { MockStudent } from '../mock/mockStudents';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 export default function TopicHeatmap({ students, onStudentClick }: Props) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700">
-      <table className="min-w-full text-xs border-collapse" style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}>
+      <table className="min-w-full text-xs border-collapse" style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}>
         <thead>
           <tr className="bg-slate-50 dark:bg-slate-800/60">
             <th className="sticky right-0 z-10 bg-slate-50 dark:bg-slate-800/60 px-3 py-2 text-right font-bold text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 min-w-[120px]">

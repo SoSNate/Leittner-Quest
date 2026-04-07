@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, Tooltip, Cell,
@@ -82,7 +82,7 @@ export default function TeacherOverview({ onBack, darkMode }: Props) {
   return (
     <div
       className="min-h-screen bg-[#f4eff5] dark:bg-[#0e0e11]"
-      style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}
+      style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}
       dir="rtl"
     >
       {/* Header */}
@@ -165,7 +165,7 @@ export default function TeacherOverview({ onBack, darkMode }: Props) {
                   <BarChart data={topicBarData} margin={{ top: 4, right: 8, left: -20, bottom: 40 }}>
                     <XAxis
                       dataKey="topic"
-                      tick={{ fontSize: 10, fill: darkMode ? '#94a3b8' : '#64748b', fontFamily: 'Rubik, Heebo, sans-serif' }}
+                      tick={{ fontSize: 10, fill: darkMode ? '#94a3b8' : '#64748b', fontFamily: 'Nunito, Heebo, sans-serif' }}
                       angle={-40}
                       textAnchor="end"
                       interval={0}
@@ -173,7 +173,7 @@ export default function TeacherOverview({ onBack, darkMode }: Props) {
                     <YAxis domain={[0, 5]} tick={{ fontSize: 10, fill: darkMode ? '#94a3b8' : '#64748b' }} />
                     <Tooltip
                       formatter={(v) => [`קופסה ${v}`, 'ממוצע']}
-                      contentStyle={{ fontFamily: 'Rubik, Heebo, sans-serif', fontSize: 12 }}
+                      contentStyle={{ fontFamily: 'Nunito, Heebo, sans-serif', fontSize: 12 }}
                     />
                     <Bar dataKey="avg" radius={[4, 4, 0, 0]}>
                       {topicBarData.map((entry, i) => (
@@ -192,7 +192,7 @@ export default function TeacherOverview({ onBack, darkMode }: Props) {
                     <PolarGrid stroke={darkMode ? '#334155' : '#e2e8f0'} />
                     <PolarAngleAxis
                       dataKey="topic"
-                      tick={{ fontSize: 10, fill: darkMode ? '#94a3b8' : '#64748b', fontFamily: 'Rubik, Heebo, sans-serif' }}
+                      tick={{ fontSize: 10, fill: darkMode ? '#94a3b8' : '#64748b', fontFamily: 'Nunito, Heebo, sans-serif' }}
                     />
                     <Radar dataKey="avg" stroke="#6200EE" fill="#6200EE" fillOpacity={0.25} strokeWidth={2} dot />
                   </RadarChart>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Component, type ReactNode, type ErrorInfo } from 'react';
+﻿import { useEffect, useRef, useState, Component, type ReactNode, type ErrorInfo } from 'react';
 import { useAppStore } from './store/useAppStore';
 import GlobalMascot from './components/mascot/GlobalMascot';
 
@@ -163,7 +163,7 @@ export default function App() {
       {view.type === 'module3-player' && <Module3Player onBack={() => setView({ type: 'home' })} />}
       {view.type === 'teacher' && <TeacherOverview onBack={() => setView({ type: 'home' })} darkMode={theme === 'dark'} />}
       {!isSubView && (
-    <div className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] text-[#2f2e32] dark:text-slate-100 overflow-x-hidden" dir="rtl" style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}>
+    <div className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] text-[#2f2e32] dark:text-slate-100 overflow-x-hidden" dir="rtl" style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-[#0e0e11]/90 backdrop-blur border-b border-[#afacb1]/30 dark:border-slate-700/50 px-5 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">

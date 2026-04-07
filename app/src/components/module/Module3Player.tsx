@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import DerivativeDrill from '../steps/DerivativeDrill';
 import DragDerivativeBuilder from '../steps/DragDerivativeBuilder';
@@ -300,7 +300,7 @@ export default function Module3Player({ onBack }: Props) {
       ctx.save();
       ctx.direction = 'ltr';
       ctx.fillStyle = isDark ? '#64748b' : '#a09ab0';
-      ctx.font = '10px Rubik, Heebo, sans-serif';
+      ctx.font = '10px Nunito, Heebo, sans-serif';
       const tStep = canvasMode <= 1 && zoomLevel > 6 ? 0.5 : 1;
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       for (let i = Math.ceil(tgtX - vrX); i <= Math.floor(tgtX + vrX); i += tStep) {
@@ -365,7 +365,7 @@ export default function Module3Player({ onBack }: Props) {
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
         // Labels
         ctx.save(); ctx.direction = 'ltr';
-        ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+        ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
         const lbp = toS(-2.5, fn(-2.5));
         if (lbp.px > 0 && lbp.px < w - 80) ctx.fillText(`y=${a}x²${b>=0?'+':''}${b}x`, lbp.px + 4, lbp.py - 2);
         ctx.fillStyle = '#f59e0b'; ctx.textBaseline = 'top';
@@ -400,7 +400,7 @@ export default function Module3Player({ onBack }: Props) {
 
         // Labels for the two parabolas
         ctx.save(); ctx.direction = 'ltr';
-        ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+        ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
         const lx1 = toS(-2.2, 4.84);
         ctx.fillStyle = '#7c3aed'; ctx.textAlign = 'right';
         if (lx1.px > 5 && lx1.px < w - 5) ctx.fillText('f(x)=x²', lx1.px - 4, lx1.py);
@@ -436,7 +436,7 @@ export default function Module3Player({ onBack }: Props) {
         // "same slope" annotation
         ctx.save(); ctx.direction = 'ltr';
         ctx.fillStyle = isDark ? '#fbbf24' : '#92400e';
-        ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+        ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'left'; ctx.textBaseline = 'top';
         const mid = toS(xVal + 0.1, (antY + antYG) / 2);
         if (mid.px < w - 100) ctx.fillText(`m = ${slope.toFixed(1)} (שניהם!)`, mid.px + 8, mid.py);
@@ -487,7 +487,7 @@ export default function Module3Player({ onBack }: Props) {
         ctx.setLineDash([]);
 
         ctx.save(); ctx.direction = 'ltr';
-        ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+        ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
         ctx.fillText(`(${xVal.toFixed(1)}, ${slope.toFixed(1)})`, dp.px + 6, dp.py - 3);
         ctx.restore();
@@ -504,7 +504,7 @@ export default function Module3Player({ onBack }: Props) {
         }
         ctx.stroke();
         ctx.save(); ctx.direction = 'ltr';
-        ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Rubik, Heebo, sans-serif';
+        ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
         const lp = toS(1.8, 3.6);
         if (lp.px > 0 && lp.px < w - 80) ctx.fillText("f'(x) = 2x", lp.px + 8, lp.py);
@@ -516,7 +516,7 @@ export default function Module3Player({ onBack }: Props) {
         ctx.beginPath(); ctx.arc(vx, vy, 6, 0, Math.PI * 2); ctx.fill();
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
         ctx.save(); ctx.direction = 'ltr';
-        ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+        ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
         if (vx < w - 80) ctx.fillText('קודקוד (0,0)', vx + 7, vy - 4);
         ctx.restore();
@@ -536,7 +536,7 @@ export default function Module3Player({ onBack }: Props) {
       if (canvasMode <= 1) {
         ctx.save(); ctx.direction = 'ltr';
         ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
-        ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+        ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
         ctx.fillText(`(${xVal.toFixed(1)}, ${antY.toFixed(2)})`, apx + 9, apy - 8);
         ctx.restore();
@@ -608,7 +608,7 @@ export default function Module3Player({ onBack }: Props) {
   // ─── Render ───────────────────────────────────────────────────────────────────
   return (
     <div dir="rtl" className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] text-[#2f2e32] dark:text-slate-100 flex flex-col"
-      style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}>
+      style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}>
 
       <ModuleHeader
         onBack={onBack}

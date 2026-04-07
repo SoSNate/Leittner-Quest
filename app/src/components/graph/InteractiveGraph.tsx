@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+﻿import { useRef, useEffect, useCallback } from 'react';
 
 export type GraphType = 'linear' | 'parabola';
 
@@ -74,7 +74,7 @@ export default function InteractiveGraph({
     ctx.stroke();
 
     ctx.fillStyle = darkMode ? '#64748b' : '#94a3b8';
-    ctx.font = `${Math.max(9, scale * 0.45)}px Heebo, sans-serif`;
+    ctx.font = `${Math.max(9, scale * 0.45)}px Nunito, sans-serif`;
     ctx.save();
     ctx.direction = 'ltr';
     ctx.textAlign = 'center';
@@ -131,7 +131,7 @@ export default function InteractiveGraph({
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.fillStyle = '#38bdf8';
-      ctx.font = `bold ${Math.max(10, scale * 0.5)}px Heebo, sans-serif`;
+      ctx.font = `bold ${Math.max(10, scale * 0.5)}px Nunito, sans-serif`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       ctx.fillText(`b=${b}`, ox + 10, byPx);
@@ -147,7 +147,7 @@ export default function InteractiveGraph({
       ctx.fillStyle = '#ef4444';
       ctx.fill();
       ctx.fillStyle = darkMode ? '#f8fafc' : '#1e293b';
-      ctx.font = `bold ${Math.max(9, scale * 0.45)}px Heebo, sans-serif`;
+      ctx.font = `bold ${Math.max(9, scale * 0.45)}px Nunito, sans-serif`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'bottom';
       ctx.save();

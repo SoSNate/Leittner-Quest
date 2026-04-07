@@ -1,4 +1,4 @@
-import {
+﻿import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
 } from 'recharts';
@@ -45,7 +45,7 @@ export default function StudentReport({ student, darkMode, onBack }: Props) {
   return (
     <div
       className="min-h-screen bg-[#f4eff5] dark:bg-[#0e0e11]"
-      style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}
+      style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}
       dir="rtl"
     >
       {/* Header */}
@@ -122,7 +122,7 @@ export default function StudentReport({ student, darkMode, onBack }: Props) {
                 <YAxis domain={[0, 100]} tick={{ fontSize: 10, fill: darkMode ? '#94a3b8' : '#64748b' }} />
                 <Tooltip
                   formatter={(v) => [`${v}%`, 'שליטה']}
-                  contentStyle={{ fontFamily: 'Rubik, Heebo, sans-serif', fontSize: 12 }}
+                  contentStyle={{ fontFamily: 'Nunito, Heebo, sans-serif', fontSize: 12 }}
                 />
                 <Line type="monotone" dataKey="score" stroke="#6200EE" strokeWidth={2.5} dot={false} />
               </LineChart>
@@ -137,7 +137,7 @@ export default function StudentReport({ student, darkMode, onBack }: Props) {
                 <PolarGrid stroke={darkMode ? '#334155' : '#e2e8f0'} />
                 <PolarAngleAxis
                   dataKey="topic"
-                  tick={{ fontSize: 9, fill: darkMode ? '#94a3b8' : '#64748b', fontFamily: 'Rubik, Heebo, sans-serif' }}
+                  tick={{ fontSize: 9, fill: darkMode ? '#94a3b8' : '#64748b', fontFamily: 'Nunito, Heebo, sans-serif' }}
                 />
                 <Radar dataKey="level" stroke="#6200EE" fill="#6200EE" fillOpacity={0.3} strokeWidth={2} />
               </RadarChart>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+﻿import React, { useState, useCallback } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 
 // Splits Hebrew+math text and wraps math expressions as dir="ltr"
@@ -932,7 +932,7 @@ export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: 
 
   return (
     <div className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] text-[#2f2e32] dark:text-slate-100 overflow-x-hidden"
-      dir="rtl" style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}>
+      dir="rtl" style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}>
 
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-[#0e0e11]/90 backdrop-blur border-b border-[#afacb1]/30 dark:border-slate-700/50 px-4 py-3">

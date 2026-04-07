@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+﻿import { useRef, useEffect, useCallback } from 'react';
 
 interface Props {
   darkMode: boolean;
@@ -41,7 +41,7 @@ function SlopeCanvas({ darkMode }: { darkMode: boolean }) {
 
     // Axis labels
     ctx.fillStyle = darkMode ? '#64748b' : '#94a3b8';
-    ctx.font = `bold 10px Rubik, Heebo, sans-serif`;
+    ctx.font = `bold 10px Nunito, Heebo, sans-serif`;
     ctx.textAlign = 'center';
     for (let x = 0; x <= 6; x += 2) {
       ctx.fillText(String(x), tx(x), pad + ph + 14);
@@ -70,7 +70,7 @@ function SlopeCanvas({ darkMode }: { darkMode: boolean }) {
 
     // Run label
     ctx.fillStyle = '#f59e0b';
-    ctx.font = `bold 11px Rubik, Heebo, sans-serif`;
+    ctx.font = `bold 11px Nunito, Heebo, sans-serif`;
     ctx.textAlign = 'center';
     ctx.fillText('שינוי ב-X = 3', (tx(p1.x) + tx(p2.x)) / 2, ty(p1.y) + 16);
     // Rise label
@@ -83,7 +83,7 @@ function SlopeCanvas({ darkMode }: { darkMode: boolean }) {
       ctx.fillStyle = '#34d399'; ctx.fill();
       ctx.strokeStyle = darkMode ? '#0f172a' : '#f8fafc'; ctx.lineWidth = 2; ctx.stroke();
       ctx.fillStyle = darkMode ? '#e2e8f0' : '#334155';
-      ctx.font = `bold 11px Rubik, Heebo, sans-serif`;
+      ctx.font = `bold 11px Nunito, Heebo, sans-serif`;
       ctx.textAlign = i === 0 ? 'right' : 'left';
       ctx.fillText(`(${p.x},${p.y})`, tx(p.x) + (i === 0 ? -8 : 8), ty(p.y) - 8);
     });

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 interface Term {
   coefficient: number;
@@ -88,7 +88,7 @@ export default function DragDerivativeBuilder({ terms, darkMode, onDone }: Props
   const accentLight = darkMode ? 'rgba(167,139,250,0.15)' : 'rgba(98,0,238,0.08)';
 
   return (
-    <div className="rounded-2xl border overflow-hidden" style={{ background: surface, borderColor: border, fontFamily: 'Rubik, Heebo, sans-serif' }}>
+    <div className="rounded-2xl border overflow-hidden" style={{ background: surface, borderColor: border, fontFamily: 'Nunito, Heebo, sans-serif' }}>
       {/* Header */}
       <div className="px-5 py-3 border-b flex items-center gap-2" style={{ borderColor: border, background: accentLight }}>
         <span className="text-base" role="img">🔧</span>

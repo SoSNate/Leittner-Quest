@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+﻿import { useRef, useEffect, useState, useCallback } from 'react';
 
 interface Props {
   darkMode: boolean;
@@ -67,7 +67,7 @@ export default function SteppingGraph({ darkMode, onDone }: Props) {
     ctx.beginPath(); ctx.moveTo(pad, toCanvasY(0)); ctx.lineTo(pad + pw, toCanvasY(0)); ctx.stroke();
 
     // Axis labels
-    ctx.fillStyle = textCol; ctx.font = '11px Rubik, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = textCol; ctx.font = '11px Nunito, sans-serif'; ctx.textAlign = 'center';
     for (let x = 0; x <= 8; x++) {
       ctx.fillText(String(x), toCanvasX(x), pad + ph + 16);
     }
@@ -113,7 +113,7 @@ export default function SteppingGraph({ darkMode, onDone }: Props) {
 
         // Labels
         if (i === 1) {
-          ctx.fillStyle = stepCol; ctx.font = 'bold 11px Rubik, sans-serif'; ctx.textAlign = 'center';
+          ctx.fillStyle = stepCol; ctx.font = 'bold 11px Nunito, sans-serif'; ctx.textAlign = 'center';
           const midX = (toCanvasX(p0.x) + toCanvasX(p1.x)) / 2;
           ctx.fillText('+1', midX, toCanvasY(p0.y) + 14);
           ctx.textAlign = 'left';
@@ -132,7 +132,7 @@ export default function SteppingGraph({ darkMode, onDone }: Props) {
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
       // Coordinate label on last point
       if (i === points.length - 1) {
-        ctx.fillStyle = textCol; ctx.font = 'bold 12px Rubik, sans-serif'; ctx.textAlign = 'left';
+        ctx.fillStyle = textCol; ctx.font = 'bold 12px Nunito, sans-serif'; ctx.textAlign = 'left';
         ctx.fillText(`(${p.x}, ${p.y})`, toCanvasX(p.x) + 10, toCanvasY(p.y) - 6);
       }
     });

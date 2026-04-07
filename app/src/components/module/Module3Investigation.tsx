@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import InvestigationDrill from '../steps/InvestigationDrill';
 import ModuleHeader from './ModuleHeader';
@@ -230,7 +230,7 @@ export default function Module3Investigation({ onBack }: Props) {
 
       // Tick labels
       ctx.save(); ctx.direction = 'ltr';
-      ctx.fillStyle = isDark ? '#64748b' : '#a09ab0'; ctx.font = '10px Rubik, Heebo, sans-serif';
+      ctx.fillStyle = isDark ? '#64748b' : '#a09ab0'; ctx.font = '10px Nunito, Heebo, sans-serif';
       ctx.textAlign = 'center'; ctx.textBaseline = 'top';
       for (let x = xMin + 1; x <= xMax; x++) {
         if (x === 0) continue;
@@ -271,7 +271,7 @@ export default function Module3Investigation({ onBack }: Props) {
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
         if (label) {
           ctx.save(); ctx.direction = 'ltr';
-          ctx.fillStyle = color; ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+          ctx.fillStyle = color; ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
           ctx.textAlign = labelX > 0 ? 'left' : 'right';
           ctx.textBaseline = 'middle';
           ctx.fillText(label, tx(x) + labelX * 8, ty(y) + labelY * 2);
@@ -329,7 +329,7 @@ export default function Module3Investigation({ onBack }: Props) {
           ctx.fillStyle = '#FCE300'; ctx.beginPath(); ctx.arc(tx(xVal), ty(antY), 5.5, 0, Math.PI * 2); ctx.fill();
           ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
           ctx.save(); ctx.direction = 'ltr';
-          ctx.fillStyle = isDark ? '#cbd5e1' : '#475569'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+          ctx.fillStyle = isDark ? '#cbd5e1' : '#475569'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
           ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
           ctx.fillText(`(${xVal.toFixed(1)}, ${antY.toFixed(1)})`, tx(xVal) + 8, ty(antY) - 6);
           ctx.restore();
@@ -354,14 +354,14 @@ export default function Module3Investigation({ onBack }: Props) {
         } else {
           // No roots label
           ctx.save(); ctx.direction = 'ltr';
-          ctx.fillStyle = '#ef4444'; ctx.font = 'bold 12px Rubik, Heebo, sans-serif';
+          ctx.fillStyle = '#ef4444'; ctx.font = 'bold 12px Nunito, Heebo, sans-serif';
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillText('אין שורשים', w / 2, padT + 20);
           ctx.restore();
         }
         // Delta annotation
         ctx.save(); ctx.direction = 'ltr';
-        ctx.fillStyle = isDark ? '#94a3b8' : '#64748b'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+        ctx.fillStyle = isDark ? '#94a3b8' : '#64748b'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'left'; ctx.textBaseline = 'top';
         ctx.fillText(`\u03b4 = ${delta.toFixed(1)}`, padL + 4, padT + 4);
         ctx.restore();
@@ -387,7 +387,7 @@ export default function Module3Investigation({ onBack }: Props) {
           // Min/Max label
           ctx.save(); ctx.direction = 'ltr';
           ctx.fillStyle = a > 0 ? '#10b981' : '#ef4444';
-          ctx.font = 'bold 11px Rubik, Heebo, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+          ctx.font = 'bold 11px Nunito, Heebo, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
           ctx.fillText(a > 0 ? 'מינימום ↓' : 'מקסימום ↑', tx(xv), ty(yv) + (a > 0 ? -12 : 18));
           ctx.restore();
         }
@@ -424,7 +424,7 @@ export default function Module3Investigation({ onBack }: Props) {
         ctx.setLineDash([]);
 
         // Labels
-        ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+        ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
 
         // Domain labels
@@ -436,7 +436,7 @@ export default function Module3Investigation({ onBack }: Props) {
 
         // Arrows for increasing/decreasing on x-axis
         ctx.fillStyle = isDark ? '#a78bfa' : '#7c3aed';
-        ctx.font = 'bold 12px Rubik, Heebo, sans-serif';
+        ctx.font = 'bold 12px Nunito, Heebo, sans-serif';
         ctx.textAlign = 'center'; ctx.textBaseline = 'top';
         if (tx(-1) > padL + 30) ctx.fillText('↘ יורדת', tx(-2), y0 + 6);
         ctx.fillText('↗ עולה', tx(2.5), y0 + 6);
@@ -477,7 +477,7 @@ export default function Module3Investigation({ onBack }: Props) {
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
     <div dir="rtl" className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] text-[#2f2e32] dark:text-slate-100 flex flex-col"
-      style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}>
+      style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}>
 
       <ModuleHeader
         onBack={onBack}

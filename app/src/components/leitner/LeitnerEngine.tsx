@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import type { QuizQuestion } from '../../types';
 import type { MascotType } from '../../store/useAppStore';
@@ -63,7 +63,7 @@ function SlopeGraph({ points, darkMode }: SlopeGraphProps) {
       ctx.beginPath(); ctx.moveTo(tx(p2.x), ty(p1.y)); ctx.lineTo(tx(p2.x), ty(p2.y)); ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif';
+      ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(`שינוי X: ${p2.x - p1.x}`, (tx(p1.x) + tx(p2.x)) / 2, ty(p1.y) + 14);
       ctx.textAlign = 'left';
@@ -76,7 +76,7 @@ function SlopeGraph({ points, darkMode }: SlopeGraphProps) {
       ctx.fillStyle = '#34d399'; ctx.fill();
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
       ctx.fillStyle = darkMode ? '#cbd5e1' : '#334155';
-      ctx.font = 'bold 11px Rubik, Heebo, sans-serif';
+      ctx.font = 'bold 11px Nunito, Heebo, sans-serif';
       ctx.textAlign = i === 0 ? 'right' : 'left';
       ctx.fillText(`(${p.x},${p.y})`, tx(p.x) + (i === 0 ? -8 : 8), ty(p.y) - 6);
     });

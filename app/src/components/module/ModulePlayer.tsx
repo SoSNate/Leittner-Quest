@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+﻿import { useState, useCallback, useEffect } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Lesson, Step } from '../../types';
 import InteractiveGraph from '../graph/InteractiveGraph';
@@ -67,7 +67,7 @@ export default function ModulePlayer({ lesson, onBack }: Props) {
   const pct = Math.round((currentStep / (TOTAL - 1)) * 100);
 
   return (
-    <div className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] text-[#2f2e32] dark:text-slate-100 overflow-x-hidden" dir="rtl" style={{ fontFamily: 'Rubik, Heebo, sans-serif' }}>
+    <div className="min-h-screen bg-[#faf5fb] dark:bg-[#0e0e11] text-[#2f2e32] dark:text-slate-100 overflow-x-hidden" dir="rtl" style={{ fontFamily: 'Nunito, Heebo, sans-serif' }}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/90 dark:bg-[#0e0e11]/90 backdrop-blur border-b border-[#afacb1]/30 dark:border-slate-700/50 px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">

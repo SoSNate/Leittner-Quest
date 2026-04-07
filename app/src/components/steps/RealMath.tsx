@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+﻿import { useState, useRef, useEffect, useCallback } from 'react';
 
 // Fixed problem: y = x² - 4x + 3
 // a=1, b=-4, c=3
@@ -62,7 +62,7 @@ export default function RealMath({ darkMode, onDone }: Props) {
     ctx.beginPath(); ctx.moveTo(pad, ty(0)); ctx.lineTo(pad + pw, ty(0)); ctx.stroke();
 
     // Axis labels
-    ctx.fillStyle = darkMode ? '#94a3b8' : '#64748b'; ctx.font = '11px Rubik, Heebo, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = darkMode ? '#94a3b8' : '#64748b'; ctx.font = '11px Nunito, Heebo, sans-serif'; ctx.textAlign = 'center';
     for (let x = -1; x <= 5; x++) ctx.fillText(String(x), tx(x), pad + ph + 16);
     ctx.textAlign = 'right';
     for (let y = -3; y <= 5; y++) ctx.fillText(String(y), pad - 5, ty(y) + 4);
@@ -85,7 +85,7 @@ export default function RealMath({ darkMode, onDone }: Props) {
       ctx.beginPath(); ctx.arc(tx(2), ty(-1), 6, 0, Math.PI * 2);
       ctx.fillStyle = '#ef4444'; ctx.fill();
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 11px Rubik, Heebo, sans-serif'; ctx.textAlign = 'left';
+      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 11px Nunito, Heebo, sans-serif'; ctx.textAlign = 'left';
       ctx.fillText('(2, \u22121)', tx(2) + 8, ty(-1) - 4);
 
       // Y-intercept (0, 3)

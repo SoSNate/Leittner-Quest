@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+﻿import { useState, useRef, useEffect, useCallback } from 'react';
 import { normalizeInput } from './utils';
 
 // Problem: y = x² − 8x + 3
@@ -62,7 +62,7 @@ export default function DerivativeDrill({ darkMode, onDone }: Props) {
     ctx.beginPath(); ctx.moveTo(pad, ty(0)); ctx.lineTo(pad + pw, ty(0)); ctx.stroke();
 
     // Axis labels
-    ctx.fillStyle = darkMode ? '#64748b' : '#94a3b8'; ctx.font = '10px Rubik, Heebo, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillStyle = darkMode ? '#64748b' : '#94a3b8'; ctx.font = '10px Nunito, Heebo, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     for (let x = xMin + 1; x <= xMax; x++) ctx.fillText(String(x), tx(x), ty(0) + 4);
     ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
     for (let y = -15; y <= 10; y += 5) if (y !== 0) ctx.fillText(String(y), tx(0) - 4, ty(y));
@@ -93,21 +93,21 @@ export default function DerivativeDrill({ darkMode, onDone }: Props) {
       }
       ctx.stroke();
       // Label derivative line
-      ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
       ctx.fillText("y' = 2x\u22128", tx(6.5), ty(dfn(6.5)) - 4);
 
       // Vertex (4, -13)
       ctx.beginPath(); ctx.arc(tx(4), ty(-13), 6, 0, Math.PI * 2);
       ctx.fillStyle = '#ef4444'; ctx.fill();
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
       ctx.fillText('(4, \u221213)', tx(4) + 8, ty(-13));
 
       // f'(1) dot
       ctx.beginPath(); ctx.arc(tx(1), ty(fn(1)), 5, 0, Math.PI * 2);
       ctx.fillStyle = '#10b981'; ctx.fill();
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
-      ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px Rubik, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+      ctx.fillStyle = '#10b981'; ctx.font = 'bold 10px Nunito, Heebo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
       ctx.fillText("f'(1)=\u22126", tx(1) + 7, ty(fn(1)) - 4);
     }
   }, [darkMode, allDone]);

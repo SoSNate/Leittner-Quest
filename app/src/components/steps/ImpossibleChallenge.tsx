@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useState } from 'react';
+﻿import { useRef, useEffect, useCallback, useState } from 'react';
 import SliderController from '../ui/SliderController';
 import { useAppStore } from '../../store/useAppStore';
 
@@ -51,7 +51,7 @@ export default function ImpossibleChallenge({ darkMode, onDone }: Props) {
     ctx.beginPath(); ctx.moveTo(pad, ty(0)); ctx.lineTo(pad + pw, ty(0)); ctx.stroke();
 
     // Axis labels
-    ctx.fillStyle = darkMode ? '#94a3b8' : '#64748b'; ctx.font = '11px Rubik, Heebo, sans-serif';
+    ctx.fillStyle = darkMode ? '#94a3b8' : '#64748b'; ctx.font = '11px Nunito, Heebo, sans-serif';
     ctx.textAlign = 'center';
     for (let x = xMin; x <= xMax; x++) ctx.fillText(String(x), tx(x), pad + ph + 16);
     ctx.textAlign = 'right';
@@ -91,7 +91,7 @@ export default function ImpossibleChallenge({ darkMode, onDone }: Props) {
       ctx.fill();
       ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
       ctx.fillStyle = darkMode ? '#0f172a' : '#484000';
-      ctx.font = 'bold 12px Rubik, Heebo, sans-serif'; ctx.textAlign = 'center';
+      ctx.font = 'bold 12px Nunito, Heebo, sans-serif'; ctx.textAlign = 'center';
       ctx.fillText('★', tx(p.x), ty(p.y) + 4);
     });
   }, [sim.m, sim.b, darkMode, gaveUp]);
