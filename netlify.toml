@@ -1,0 +1,11 @@
+[build]
+  # The React app lives in the app/ subdirectory
+  base    = "app"
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback — all routes serve index.html so hash-routing works correctly
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

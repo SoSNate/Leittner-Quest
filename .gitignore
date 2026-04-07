@@ -1,0 +1,63 @@
+# ── Claude Code (AI session memory — contains IP, never commit) ──
+.claude/
+
+# ── Environment variables ─────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Local override / personal config files ────────────────────────
+*.local
+*.local.json
+settings.local.*
+config.local.*
+
+# ── Node.js ───────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+package-lock.json.bak
+
+# ── Build outputs ─────────────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+.vite/
+*.tsbuildinfo
+
+# ── IDE / Editor ──────────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.history/
+*.code-workspace
+
+# ── OS-generated files ────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── Logs & diagnostics ────────────────────────────────────────────
+logs/
+*.log
+
+# ── Temporary / cache ─────────────────────────────────────────────
+.cache/
+.temp/
+.tmp/
+*.bak
+*.orig
