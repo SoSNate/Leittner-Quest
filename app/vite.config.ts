@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     // Strip console.* and debugger statements from production bundles only.
     // In dev mode (npm run dev) logs are preserved for debugging.
-    drop: mode === 'production' ? ['console', 'debugger'] : [],
+    drop: mode === 'production' ? (['console', 'debugger'] as const) : [],
   },
 
   preview: {
