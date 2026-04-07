@@ -78,7 +78,7 @@ function genSlopeFromPoints(): PracticeQuestion {
 function genIdentifySlope(): PracticeQuestion {
   const m = pick(SLOPES);
   const b = pick(INTERCEPTS);
-  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` - ${Math.abs(b)}`;
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` − ${Math.abs(b)}`;
   const mStr = m === 1 ? '' : m === -1 ? '-' : String(m);
   const eq = `y = ${mStr}x${bStr}`;
   const opts = shuffle([m, ...distractors(m, SLOPES)]);
@@ -94,7 +94,7 @@ function genIdentifySlope(): PracticeQuestion {
 function genIdentifyIntercept(): PracticeQuestion {
   const m = pick(SLOPES);
   const b = pick(INTERCEPTS);
-  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` - ${Math.abs(b)}`;
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` − ${Math.abs(b)}`;
   const mStr = m === 1 ? '' : m === -1 ? '-' : String(m);
   const eq = `y = ${mStr}x${bStr}`;
   const opts = shuffle([b, ...distractors(b, INTERCEPTS)]);
@@ -126,7 +126,7 @@ function genLineDirection(): PracticeQuestion {
 function genEquationFromMB(): PracticeQuestion {
   const m = pick(SLOPES);
   const b = pick(INTERCEPTS);
-  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` - ${Math.abs(b)}`;
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` − ${Math.abs(b)}`;
   const mStr = m === 1 ? '' : m === -1 ? '-' : String(m);
   const correct = `y = ${mStr}x${bStr}`;
   const fakes = shuffle(SLOPES.filter(s => s !== m)).slice(0, 2).map(fm => {
@@ -134,7 +134,7 @@ function genEquationFromMB(): PracticeQuestion {
     return `y = ${fmStr}x${bStr}`;
   });
   const fb = pick(INTERCEPTS.filter(i => i !== b));
-  const fbStr = fb === 0 ? '' : fb > 0 ? ` + ${fb}` : ` - ${Math.abs(fb)}`;
+  const fbStr = fb === 0 ? '' : fb > 0 ? ` + ${fb}` : ` − ${Math.abs(fb)}`;
   fakes.push(`y = ${mStr}x${fbStr}`);
   const opts = shuffle([correct, ...fakes]);
   return {
@@ -171,7 +171,7 @@ function genVertexX(): PracticeQuestion {
   const shuffled = shuffle(opts);
   return {
     id: 'practice_vertex_x',
-    prompt: `מה ה-x של הקודקוד של y = ${a}x² ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}x?`,
+    prompt: `מה ה-x של הקודקוד של y = ${a}x² ${b >= 0 ? '+ ' + b : '− ' + Math.abs(b)}x?`,
     options: shuffled.map(String),
     correct: shuffled.indexOf(xv),
     explanation: `x_v = \u2212b \u00f7 2a = \u2212(${b}) \u00f7 (2\u00b7${a}) = ${-b} \u00f7 ${2 * a} = ${xv}`,
@@ -188,8 +188,8 @@ function genDiscriminant(): PracticeQuestion {
   const numRoots = disc > 0 ? 2 : disc === 0 ? 1 : 0;
   const correct = numRoots === 2 ? 'שני שורשים' : numRoots === 1 ? 'שורש אחד' : 'אין שורשים ממשיים';
   const opts = shuffle(['שני שורשים', 'שורש אחד', 'אין שורשים ממשיים', 'לא ניתן לדעת']);
-  const cStr = c === 0 ? '' : c > 0 ? ` + ${c}` : ` - ${Math.abs(c)}`;
-  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` - ${Math.abs(b)}x`;
+  const cStr = c === 0 ? '' : c > 0 ? ` + ${c}` : ` − ${Math.abs(c)}`;
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
   const aStr = a === 1 ? '' : a === -1 ? '-' : String(a);
   return {
     id: 'practice_discriminant',
@@ -207,7 +207,7 @@ function genVertexXM3(): PracticeQuestion {
   const opts = shuffle([xv, xv + 1, xv - 1, xv * -1].filter((v, i, arr) => arr.indexOf(v) === i)).slice(0, 4);
   if (!opts.includes(xv)) opts[0] = xv;
   const shuffled = shuffle(opts);
-  const bStr = b > 0 ? ` + ${b}x` : ` - ${Math.abs(b)}x`;
+  const bStr = b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
   const aStr = a === 1 ? '' : a === -1 ? '-' : String(a);
   return {
     id: 'practice_vertex_x_m3',
@@ -230,7 +230,7 @@ function genParabolaRange(): PracticeQuestion {
   const wrong3 = 'כל המספרים הממשיים';
   const opts = shuffle([range, wrong1, wrong2, wrong3]);
   const aStr = a === 1 ? '' : a === -1 ? '-' : String(a);
-  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` - ${Math.abs(b)}x`;
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
   return {
     id: 'practice_range',
     prompt: `הפרבולה y = ${aStr}x²${bStr} ${dir}, קודקוד ב-y = ${yv}. מה תחום הערכים?`,
@@ -252,8 +252,8 @@ function genRootSign(): PracticeQuestion {
   // y = (x-r1)(x-r2) = x² - (r1+r2)x + r1*r2
   const bVal = -(r1 + r2);
   const cVal = r1 * r2;
-  const bStr = bVal === 0 ? '' : bVal > 0 ? ` + ${bVal}x` : ` - ${Math.abs(bVal)}x`;
-  const cStr = cVal === 0 ? '' : cVal > 0 ? ` + ${cVal}` : ` - ${Math.abs(cVal)}`;
+  const bStr = bVal === 0 ? '' : bVal > 0 ? ` + ${bVal}x` : ` − ${Math.abs(bVal)}x`;
+  const cStr = cVal === 0 ? '' : cVal > 0 ? ` + ${cVal}` : ` − ${Math.abs(cVal)}`;
   const opts = shuffle([c.answer, ...c.wrong]);
   return {
     id: 'practice_root_sign',
