@@ -1,0 +1,121 @@
+@import 'katex/dist/katex.min.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens ───────────────────────────────────────────── */
+:root {
+  direction: rtl;
+  --robot-bubble-bg: #f4eff5;
+
+  /* Typography scale */
+  --font-sans: 'Rubik', 'Heebo', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Hebrew-optimised line-height (tighter ascenders/descenders) */
+  --lh-base: 1.75;
+  --lh-tight: 1.35;
+}
+.dark {
+  --robot-bubble-bg: #1e1b24;
+}
+
+/* ── Global base typography ──────────────────────────────────── */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: var(--lh-base);
+    /* Enable OT features: kerning + ligatures for Rubik/Heebo */
+    font-feature-settings: 'kern' 1, 'liga' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    @apply bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100;
+  }
+
+  /* Headings: tighter line-height looks better in Hebrew bold */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: var(--lh-tight);
+    font-weight: 700;
+  }
+
+  /* ── LTR / Math isolation ────────────────────────────────────
+     All [dir="ltr"] elements (math, equations, code) must:
+     • force LTR bidi
+     • use monospace so numbers/operators align predictably
+     • never inherit RTL from a parent                         */
+  [dir="ltr"],
+  .math-ltr,
+  span[dir="ltr"] {
+    direction: ltr !important;
+    unicode-bidi: isolate;
+    font-family: var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+
+  /* Exception: UI elements that happen to use dir="ltr" for
+     layout (inputs, flex rows) should keep sans font */
+  input[dir="ltr"],
+  button[dir="ltr"],
+  div[dir="ltr"] {
+    font-family: var(--font-sans);
+    letter-spacing: normal;
+  }
+}
+
+/* Learn-step description spacing */
+.learn-desc {
+  line-height: 1.9;
+}
+.learn-desc br + br {
+  display: block;
+  margin-bottom: 0.55rem;
+  content: '';
+}
+.learn-desc strong {
+  font-weight: 700;
+}
+.learn-desc span[dir="ltr"] {
+  letter-spacing: 0.01em;
+}
+
+.math-ltr {
+  direction: ltr !important;
+  unicode-bidi: bidi-override;
+  display: inline-block;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.35s ease forwards; }
+
+@keyframes mascotSlideUp {
+  from { opacity: 0; transform: translateY(60px) scale(0.8); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* Robot SVG animations */
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes mascotBlink {
+  0%, 38%, 42%, 100% { transform: scaleY(1); }
+  40%                { transform: scaleY(0.08); }
+}
+@keyframes mascotShadow {
+  0%, 100% { transform: scaleX(0.75); opacity: 0.5; }
+  50%      { transform: scaleX(1);    opacity: 1; }
+}
+
+@keyframes hintPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.08); }
+}
+.animate-hint { animation: hintPulse 0.5s ease-in-out; }
