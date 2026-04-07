@@ -10,10 +10,10 @@ import { normalizeInput } from './utils';
 
 interface Field { label: string; answer: string | string[]; hint: string; placeholder: string }
 const FIELDS: Field[] = [
-  { label: "y'(x) = ?", answer: ['2x-8', '2x−8'], hint: "כלל החזקה: x² → 2x. −8x → −8. 3 → 0. אז y' = 2x−8", placeholder: '?' },
-  { label: 'x של הקודקוד (y′=0)', answer: '4', hint: "2x−8=0 → 2x=8 → x=4", placeholder: '?' },
-  { label: 'y של הקודקוד', answer: '-13', hint: "הציבו x=4: y = 16−32+3 = −13", placeholder: '?' },
-  { label: "f'(1) = ?", answer: '-6', hint: "f'(1) = 2·1−8 = 2−8 = −6", placeholder: '?' },
+  { label: "מהי הנגזרת y′(x)?", answer: ['2x-8', '2x−8'], hint: "כלל החזקה: x² → 2x. −8x → −8. 3 → 0. לכן y′ = 2x−8", placeholder: 'למשל: 2x−8' },
+  { label: 'x של הקודקוד (y′ = 0):', answer: '4', hint: "שוויון לאפס: 2x−8=0 → 2x=8 → x=4", placeholder: '?' },
+  { label: 'y של הקודקוד:', answer: '-13', hint: "הציבו x=4: y = 16−32+3 = −13", placeholder: '?' },
+  { label: "ערך הנגזרת בנקודה f′(1):", answer: '-6', hint: "f′(1) = 2·1−8 = 2−8 = −6", placeholder: '?' },
 ];
 
 interface Props { darkMode: boolean; onDone?: () => void }

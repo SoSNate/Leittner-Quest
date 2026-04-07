@@ -13,8 +13,8 @@ interface Field { label: string; answer: string; hint: string; placeholder: stri
 const FIELDS: Field[] = [
   { label: 'חיתוך ציר Y', answer: '-6', hint: 'הציבו x=0: y = 0 − 0 − 6 = −6. תמיד = c', placeholder: '?' },
   { label: 'δ = b²−4ac', answer: '25', hint: 'δ = (−1)²−4·1·(−6) = 1+24 = 25', placeholder: '?' },
-  { label: 'x₁ — שורש ראשון', answer: '3', hint: 'x = (−b+√δ)÷(2a) = (1+5)÷2 = 3', placeholder: '?' },
-  { label: 'x₂ — שורש שני', answer: '-2', hint: 'x = (−b−√δ)÷(2a) = (1−5)÷2 = −2', placeholder: '?' },
+  { label: 'x₁: שורש ראשון', answer: '3', hint: 'x = (−b+√δ)÷(2a) = (1+5)÷2 = 3', placeholder: '?' },
+  { label: 'x₂: שורש שני', answer: '-2', hint: 'x = (−b−√δ)÷(2a) = (1−5)÷2 = −2', placeholder: '?' },
   { label: 'x של הקודקוד', answer: '0.5', hint: 'x_v = −b÷(2a) = −(−1)÷(2·1) = 1÷2 = 0.5', placeholder: '?' },
 ];
 
