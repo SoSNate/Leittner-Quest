@@ -244,6 +244,13 @@ function fmt(n: number, afterOp = false): string {
   return afterOp && n < 0 ? `(${n})` : String(n);
 }
 
+// Format linear equation with standardized spacing
+function formatInputEquation(m: number, b: number): string {
+  const mStr = m === 1 ? '' : m === -1 ? '-' : String(m);
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` \u2212 ${Math.abs(b)}`;
+  return `y = ${mStr}x${bStr}`;
+}
+
 function genSlopeFromPoints(): PracticeQuestion {
   const x1 = pick([-3, -2, -1, 0, 1, 2]);
   const x2 = x1 + pick([1, 2, 3, 4]);
@@ -291,7 +298,7 @@ function genIdentifyIntercept(): PracticeQuestion {
     prompt: `מה חיתוך Y של ${eq}?`,
     options: opts.map(String),
     correct: opts.indexOf(b),
-    explanation: `b הוא הקבוע — מה y כש-x=0. ב-${eq} → b = ${b}`,
+    explanation: `b הוא הקבוע : מה y כש-x=0. ב-${eq} → b = ${b}`,
   };
 }
 
@@ -304,7 +311,7 @@ function genLineDirection(): PracticeQuestion {
   const opts = shuffle([dir, wrong1, wrong2, wrong3]);
   return {
     id: 'practice_dir',
-    prompt: `קו עם שיפוע m=${m} — לאיזה כיוון?`,
+    prompt: `קו עם שיפוע m=${m} : לאיזה כיוון?`,
     options: opts,
     correct: opts.indexOf(dir),
     explanation: m > 0 ? 'שיפוע חיובי = עולה משמאל לימין' : m < 0 ? 'שיפוע שלילי = יורד משמאל לימין' : 'שיפוע 0 = קו אופקי',
@@ -327,7 +334,7 @@ function genEquationFromMB(): PracticeQuestion {
   const opts = shuffle([correct, ...fakes]);
   return {
     id: 'practice_eq_mb',
-    prompt: `קו עם שיפוע ${m} וחיתוך Y ב-${b} — מה המשוואה?`,
+    prompt: `קו עם שיפוע ${m} וחיתוך Y ב-${b} : מה המשוואה?`,
     options: opts,
     correct: opts.indexOf(correct),
     explanation: `m=${m}, b=${b} → ${correct}`,
@@ -383,15 +390,13 @@ function genPointsToEquation(): PracticeQuestion {
   const y1 = m * x1 + b;
   const x2 = x1 + pick([2, 3]);
   const y2 = m * x2 + b;
-  const mStr = m === 1 ? '' : m === -1 ? '-' : String(m);
-  const bStr = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
   return {
     id: 'practice_pts_to_eq',
     type: 'input',
     prompt: `הקו עובר דרך (${x1},${y1}) ו-(${x2},${y2}). כתבו את משוואת הקו:`,
-    inputAnswer: [`y=${mStr}x${bStr}`, `y = ${mStr}x ${bStr}`],
+    inputAnswer: [formatInputEquation(m, b)],
     inputPlaceholder: 'y = ...',
-    explanation: `m = (${y2}−${fmt(y1, true)})÷(${x2}−${fmt(x1, true)}) = ${m}. ב = ${b} → y=${mStr}x${bStr}`,
+    explanation: `m = (${y2}−${fmt(y1, true)})÷(${x2}−${fmt(x1, true)}) = ${m}. ב = ${b} → ${formatInputEquation(m, b)}`,
   };
 }
 
@@ -449,7 +454,7 @@ function genParabolaDirection(): PracticeQuestion {
   const opts = shuffle([dir, wrong1, 'קו ישר', 'תלוי ב-b']);
   return {
     id: 'practice_para_dir',
-    prompt: `y = ${a}x² — לאיזה כיוון הפרבולה פתוחה?`,
+    prompt: `y = ${a}x² : לאיזה כיוון הפרבולה פתוחה?`,
     options: opts,
     correct: opts.indexOf(dir),
     explanation: a > 0 ? 'a>0 = פרבולה "מחייכת" = פתוחה למעלה' : 'a<0 = פרבולה "עצובה" = פתוחה למטה',
@@ -499,7 +504,7 @@ function genMinMaxM2(): PracticeQuestion {
   const opts = shuffle([correct, a > 0 ? 'מקסימום (הכי גבוה)' : 'מינימום (הכי נמוך)', 'תלוי ב-c', 'לא ניתן לדעת']);
   return {
     id: 'practice_minmax_m2',
-    prompt: `לפרבולה y = ${aStr}x²${bStr} — הקודקוד הוא:`,
+    prompt: `לפרבולה y = ${aStr}x²${bStr} : הקודקוד הוא`,
     options: opts,
     correct: opts.indexOf(correct),
     explanation: a > 0
@@ -697,7 +702,7 @@ function genMinMax(): PracticeQuestion {
   const opts = shuffle([correct, a > 0 ? 'מקסימום (הכי גבוה)' : 'מינימום (הכי נמוך)', 'תלוי ב-b', 'לא ניתן לדעת']);
   return {
     id: 'practice_minmax',
-    prompt: `לפרבולה y = ${aStr}x²${bStr} — הקודקוד הוא:`,
+    prompt: `לפרבולה y = ${aStr}x²${bStr} : הקודקוד הוא`,
     options: opts,
     correct: opts.indexOf(correct),
     explanation: a > 0
@@ -720,7 +725,7 @@ function genMonotonicity(): PracticeQuestion {
   const opts = shuffle(rawOpts.filter((v, i, arr) => arr.indexOf(v) === i));
   return {
     id: 'practice_monotonicity',
-    prompt: `בפרבולה y = ${aStr}x²${bStr} — באיזה תחום הפונקציה יורדת?`,
+    prompt: `בפרבולה y = ${aStr}x²${bStr} : באיזה תחום הפונקציה יורדת?`,
     options: opts,
     correct: opts.indexOf(correct),
     explanation: isUp

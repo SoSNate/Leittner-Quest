@@ -5,9 +5,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // Primary: Rubik first (better variable-font support), Heebo as Hebrew fallback
-        sans: ['Rubik', 'Heebo', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        heebo: ['Heebo', 'Rubik', 'sans-serif'],
+        // Primary: Merriweather (elegant, mathematical, serif), Heebo as Hebrew fallback
+        sans: ['Merriweather', 'Heebo', 'serif'],
+        heebo: ['Heebo', 'Merriweather', 'serif'],
         // Math / code: monospace stack used for all LTR formula display
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
