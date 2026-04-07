@@ -264,6 +264,98 @@ function genRootSign(): PracticeQuestion {
   };
 }
 
+// ─── Module 3 additional generators ─────────────────────────────
+function genTrinomialFactoring(): PracticeQuestion {
+  const ROOTS = [-4, -3, -2, 2, 3, 4];
+  const r1 = pick(ROOTS);
+  const r2 = pick(ROOTS.filter(r => r !== r1));
+  const b = -(r1 + r2);
+  const c = r1 * r2;
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
+  const cStr = c === 0 ? '' : c > 0 ? ` + ${c}` : ` − ${Math.abs(c)}`;
+  const correct = `x = ${r1} ו-x = ${r2}`;
+  const fakes = [
+    `x = ${r1 + 1} ו-x = ${r2}`,
+    `x = ${r1} ו-x = ${r2 - 1}`,
+    `x = ${-r1} ו-x = ${-r2}`,
+  ].filter(f => f !== correct);
+  const opts = shuffle([correct, ...fakes.slice(0, 3)]);
+  return {
+    id: 'practice_trinomial',
+    prompt: `פרקו לגורמים ומצאו שורשים: y = x²${bStr}${cStr}`,
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: `r₁·r₂ = ${c}, r₁+r₂ = ${-(b)} → (x−${r1})(x−${r2}) → שורשים: x=${r1}, x=${r2}`,
+  };
+}
+
+function genQuadraticFormula(): PracticeQuestion {
+  const ROOTS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5];
+  const r1 = pick(ROOTS);
+  const r2 = pick(ROOTS.filter(r => r !== r1));
+  const b = -(r1 + r2);
+  const c = r1 * r2;
+  const disc = b * b - 4 * c;
+  const sqd = Math.round(Math.sqrt(Math.abs(disc)));
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
+  const cStr = c === 0 ? '' : c > 0 ? ` + ${c}` : ` − ${Math.abs(c)}`;
+  const correct = `x = ${r1} ו-x = ${r2}`;
+  const fakes = [
+    `x = ${r1 + 1} ו-x = ${r2 - 1}`,
+    `x = ${-r1} ו-x = ${-r2}`,
+    `x = ${b} ו-x = ${c}`,
+  ].filter(f => f !== correct);
+  const opts = shuffle([correct, ...fakes.slice(0, 3)]);
+  return {
+    id: 'practice_quad_formula',
+    prompt: `פתרו ע"י נוסחת השורשים: x²${bStr}${cStr} = 0`,
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: `Δ = ${b}²−4·${c} = ${disc}. x = (−(${b})±√${disc})/2 = (${-b}±${sqd})/2 → x=${r1} ו-x=${r2}`,
+  };
+}
+
+function genMinMax(): PracticeQuestion {
+  const a = pick([-3, -2, -1, 1, 2, 3]);
+  const b = pick([-4, -2, 0, 2, 4]);
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
+  const aStr = a === 1 ? '' : a === -1 ? '-' : String(a);
+  const correct = a > 0 ? 'מינימום (הכי נמוך)' : 'מקסימום (הכי גבוה)';
+  const opts = shuffle([correct, a > 0 ? 'מקסימום (הכי גבוה)' : 'מינימום (הכי נמוך)', 'תלוי ב-b', 'לא ניתן לדעת']);
+  return {
+    id: 'practice_minmax',
+    prompt: `לפרבולה y = ${aStr}x²${bStr} — הקודקוד הוא:`,
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: a > 0
+      ? `a=${a} > 0 → פרבולה "מחייכת" → קודקוד = נקודת מינימום`
+      : `a=${a} < 0 → פרבולה "עצובה" → קודקוד = נקודת מקסימום`,
+  };
+}
+
+function genMonotonicity(): PracticeQuestion {
+  const a = pick([1, 2, -1, -2]);
+  const xv = pick([-3, -2, -1, 0, 1, 2, 3]);
+  const b = -2 * a * xv;
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
+  const aStr = a === 1 ? '' : a === -1 ? '-' : String(a);
+  const isUp = a > 0;
+  const decRange = isUp ? `x < ${xv}` : `x > ${xv}`;
+  const incRange = isUp ? `x > ${xv}` : `x < ${xv}`;
+  const correct = decRange;
+  const rawOpts = [decRange, incRange, `x < 0`, `x > 0`];
+  const opts = shuffle(rawOpts.filter((v, i, arr) => arr.indexOf(v) === i));
+  return {
+    id: 'practice_monotonicity',
+    prompt: `בפרבולה y = ${aStr}x²${bStr} — באיזה תחום הפונקציה יורדת?`,
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: isUp
+      ? `a>0 → פרבולה "מחייכת" → יורדת עד הקודקוד (x=${xv}), עולה אחריו. ירידה: x < ${xv}`
+      : `a<0 → פרבולה "עצובה" → עולה עד הקודקוד (x=${xv}), יורדת אחריו. ירידה: x > ${xv}`,
+  };
+}
+
 // ─── Module 4 generators — Derivatives ───────────────────────────
 function genPowerRule(): PracticeQuestion {
   const n = pick([2, 3, 4, 5]);
@@ -353,7 +445,7 @@ function genVertexViaDerivative(): PracticeQuestion {
 function generateQuestions(moduleId: number, count = 8): PracticeQuestion[] {
   const pool1 = [genSlopeFromPoints, genIdentifySlope, genIdentifyIntercept, genLineDirection, genEquationFromMB];
   const pool2 = [genParabolaDirection, genVertexX, genIdentifyIntercept, genSlopeFromPoints];
-  const pool3 = [genDiscriminant, genVertexXM3, genParabolaRange, genRootSign];
+  const pool3 = [genDiscriminant, genVertexXM3, genParabolaRange, genRootSign, genTrinomialFactoring, genQuadraticFormula, genMinMax, genMonotonicity];
   const pool4 = [genPowerRule, genPolyDerivative, genDerivativeAtPoint, genVertexViaDerivative];
   const poolMap: Record<number, (() => PracticeQuestion)[]> = { 1: pool1, 2: pool2, 3: pool3, 4: pool4 };
   const pool = poolMap[moduleId] ?? pool1;
