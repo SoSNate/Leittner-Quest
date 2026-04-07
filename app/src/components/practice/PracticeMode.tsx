@@ -18,12 +18,200 @@ function renderPrompt(text: string): React.ReactNode {
   return parts;
 }
 
+type QuestionType = 'mcq' | 'input' | 'visual-mcq' | 'visual-input';
+
+interface VisualConfig {
+  type: 'linear' | 'parabola';
+  m?: number;
+  b?: number;
+  a?: number;
+  bCoef?: number;
+  c?: number;
+  labelPoints?: { x: number; y: number; label: string }[];
+}
+
 interface PracticeQuestion {
   id: string;
   prompt: string;
-  options: string[];
-  correct: number; // index
   explanation: string;
+  type?: QuestionType; // default: 'mcq' for backwards compatibility
+
+  // MCQ fields
+  options?: string[];
+  correct?: number; // index
+
+  // Input fields (text answer)
+  inputAnswer?: string | string[]; // accepted answers or variants
+  inputPlaceholder?: string;
+
+  // Visual fields (graph above question)
+  visualConfig?: VisualConfig;
+}
+
+// ─── Mini Graph Renderer (inline SVG) ────────────────────────────
+function MiniGraph({ config, darkMode }: { config: VisualConfig; darkMode: boolean }) {
+  const width = 200, height = 160;
+  const padding = 20;
+  const w = width - 2 * padding, h = height - 2 * padding;
+  const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
+  const scale = 30; // pixels per unit
+
+  const centerX = padding + w / 2;
+  const centerY = padding + h / 2;
+
+  const axisColor = darkMode ? '#6b7280' : '#d1d5db';
+  const gridColor = darkMode ? '#374151' : '#f3f4f6';
+  const lineColor = darkMode ? '#fbbf24' : '#f59e0b';
+  const pointColor = darkMode ? '#34d399' : '#10b981';
+
+  // Draw canvas-based graph
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // HiDPI scaling
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    // Clear
+    ctx.fillStyle = darkMode ? '#1c1b1f' : '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    // Grid
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 0.5;
+    for (let i = -5; i <= 5; i++) {
+      ctx.beginPath();
+      ctx.moveTo(centerX + i * scale, padding);
+      ctx.lineTo(centerX + i * scale, padding + h);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(padding, centerY - i * scale);
+      ctx.lineTo(padding + w, centerY - i * scale);
+      ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = axisColor;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(padding, centerY);
+    ctx.lineTo(padding + w, centerY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(centerX, padding);
+    ctx.lineTo(centerX, padding + h);
+    ctx.stroke();
+
+    // Draw function
+    if (config.type === 'linear' && config.m !== undefined && config.b !== undefined) {
+      const m = config.m;
+      const b = config.b;
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let x = -5; x <= 5; x += 0.1) {
+        const y = m * x + b;
+        const px = centerX + x * scale;
+        const py = centerY - y * scale;
+        if (x === -5) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    } else if (config.type === 'parabola' && config.a !== undefined && config.bCoef !== undefined && config.c !== undefined) {
+      const a = config.a;
+      const b = config.bCoef;
+      const c = config.c;
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let x = -5; x <= 5; x += 0.1) {
+        const y = a * x * x + b * x + c;
+        const px = centerX + x * scale;
+        const py = centerY - y * scale;
+        if (x === -5) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+
+    // Draw labeled points
+    if (config.labelPoints) {
+      for (const pt of config.labelPoints) {
+        const px = centerX + pt.x * scale;
+        const py = centerY - pt.y * scale;
+        ctx.fillStyle = pointColor;
+        ctx.beginPath();
+        ctx.arc(px, py, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = darkMode ? '#f3f4f6' : '#111827';
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(pt.label, px, py - 12);
+      }
+    }
+  }, [config, darkMode]);
+
+  return <canvas ref={canvasRef} width={width} height={height} className="mx-auto mb-4 rounded border" style={{ borderColor: darkMode ? '#374151' : '#d1d5db' }} />;
+}
+
+// ─── Input Answer Component ──────────────────────────────────────
+interface InputAnswerProps {
+  placeholder?: string;
+  onSubmit: (answer: string) => void;
+  answered: boolean;
+}
+
+function InputAnswer({ placeholder = 'כתוב תשובה...', onSubmit, answered }: InputAnswerProps) {
+  const [input, setInput] = useState('');
+
+  const handleSubmit = () => {
+    onSubmit(input);
+  };
+
+  return (
+    <div className="flex gap-2">
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && !answered && handleSubmit()}
+        placeholder={placeholder}
+        disabled={answered}
+        className="flex-1 border-2 border-[#e0dbe3] dark:border-slate-600 rounded-xl px-4 py-3 font-semibold transition-all"
+        style={{ minHeight: 48 }}
+        dir="ltr"
+      />
+      <button
+        onClick={handleSubmit}
+        disabled={answered}
+        className="border-2 border-[#e0dbe3] dark:border-slate-600 rounded-xl px-4 py-3 font-semibold transition-all disabled:opacity-50"
+        style={{ minHeight: 48 }}>
+        בדוק ←
+      </button>
+    </div>
+  );
+}
+
+// ─── Normalize and match input answer ────────────────────────────
+function normalizeAnswer(s: string): string {
+  return s
+    .trim()
+    .replace(/−/g, '-')  // Unicode minus to ASCII minus
+    .replace(/\s+/g, '')   // Remove all whitespace
+    .toLowerCase();
+}
+
+function checkAnswer(input: string, correct: string | string[]): boolean {
+  const normalized = normalizeAnswer(input);
+  const correctAnswers = Array.isArray(correct) ? correct.map(normalizeAnswer) : [normalizeAnswer(correct)];
+  return correctAnswers.includes(normalized);
 }
 
 // ─── Module 1 question generators ────────────────────────────────
@@ -146,6 +334,112 @@ function genEquationFromMB(): PracticeQuestion {
   };
 }
 
+// ─── New Module 1 generators (visual-mcq + input) ────────────────
+
+function genGraphToSlope(): PracticeQuestion {
+  const m = pick(SLOPES);
+  const b = pick(INTERCEPTS);
+  const opts = shuffle([m, ...distractors(m, SLOPES)]);
+  return {
+    id: 'practice_graph_slope',
+    type: 'visual-mcq',
+    prompt: 'מה השיפוע של הקו בגרף?',
+    visualConfig: { type: 'linear', m, b },
+    options: opts.map(String),
+    correct: opts.indexOf(m),
+    explanation: `הקו עולה ${Math.abs(m)} יחידות Y לכל יחידת X → m = ${m}`,
+  };
+}
+
+function genGraphToEquation(): PracticeQuestion {
+  const m = pick(SLOPES);
+  const b = pick(INTERCEPTS);
+  const mStr = m === 1 ? '' : m === -1 ? '-' : String(m);
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}` : ` − ${Math.abs(b)}`;
+  const correct = `y = ${mStr}x${bStr}`;
+  const fakes = shuffle(SLOPES.filter(s => s !== m)).slice(0, 2).map(fm => {
+    const fmStr = fm === 1 ? '' : fm === -1 ? '-' : String(fm);
+    return `y = ${fmStr}x${bStr}`;
+  });
+  const fb = pick(INTERCEPTS.filter(i => i !== b));
+  const fbStr = fb === 0 ? '' : fb > 0 ? ` + ${fb}` : ` − ${Math.abs(fb)}`;
+  fakes.push(`y = ${mStr}x${fbStr}`);
+  const opts = shuffle([correct, ...fakes]);
+  return {
+    id: 'practice_graph_eq',
+    type: 'visual-mcq',
+    prompt: 'איזו משוואה מתאימה לקו בגרף?',
+    visualConfig: { type: 'linear', m, b },
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: `הקו: m=${m}, b=${b} → ${correct}`,
+  };
+}
+
+function genPointsToEquation(): PracticeQuestion {
+  const m = pick(SLOPES);
+  const b = pick(INTERCEPTS);
+  const x1 = pick([-2, -1, 0, 1, 2]);
+  const y1 = m * x1 + b;
+  const x2 = x1 + pick([2, 3]);
+  const y2 = m * x2 + b;
+  const mStr = m === 1 ? '' : m === -1 ? '-' : String(m);
+  const bStr = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
+  return {
+    id: 'practice_pts_to_eq',
+    type: 'input',
+    prompt: `הקו עובר דרך (${x1},${y1}) ו-(${x2},${y2}). כתבו את משוואת הקו:`,
+    inputAnswer: [`y=${mStr}x${bStr}`, `y = ${mStr}x ${bStr}`],
+    inputPlaceholder: 'y = ...',
+    explanation: `m = (${y2}−${fmt(y1, true)})÷(${x2}−${fmt(x1, true)}) = ${m}. ב = ${b} → y=${mStr}x${bStr}`,
+  };
+}
+
+function genReverseIntercept(): PracticeQuestion {
+  const m = pick(SLOPES);
+  const x0 = pick([-2, -1, 0, 1, 2]);
+  const y0 = pick([-4, -3, -2, -1, 1, 2, 3, 4]);
+  const b = y0 - m * x0;
+  return {
+    id: 'practice_reverse_intercept',
+    type: 'input',
+    prompt: `קו בשיפוע ${m} עובר ב-(${x0},${y0}). מה חיתוך Y (b)?`,
+    inputAnswer: [String(b)],
+    inputPlaceholder: 'b = ...',
+    explanation: `y = mx + b → ${y0} = ${m}·${x0} + b → b = ${b}`,
+  };
+}
+
+function genGraphToIntercept(): PracticeQuestion {
+  const m = pick(SLOPES);
+  const b = pick(INTERCEPTS);
+  const opts = shuffle([b, ...distractors(b, INTERCEPTS)]);
+  return {
+    id: 'practice_graph_intercept',
+    type: 'visual-mcq',
+    prompt: 'מה חיתוך Y של הקו בגרף?',
+    visualConfig: { type: 'linear', m, b },
+    options: opts.map(String),
+    correct: opts.indexOf(b),
+    explanation: `הקו חותך את Y בנקודה (0,${b}) → חיתוך Y = ${b}`,
+  };
+}
+
+function genPartialDataLine(): PracticeQuestion {
+  const m = pick(SLOPES);
+  const x0 = pick([-2, -1, 0, 1, 2]);
+  const y0 = pick([-4, -2, 0, 2, 4]);
+  const b = y0 - m * x0;
+  return {
+    id: 'practice_partial_data',
+    type: 'input',
+    prompt: `קו עם m=${m} עובר ב-(${x0},${y0}). מה b?`,
+    inputAnswer: [String(b)],
+    inputPlaceholder: 'b = ...',
+    explanation: `y = mx + b → ${y0} = ${m}·${x0} + b → b = ${b}`,
+  };
+}
+
 // ─── Module 2 generators ─────────────────────────────────────────
 function genParabolaDirection(): PracticeQuestion {
 
@@ -175,6 +469,85 @@ function genVertexX(): PracticeQuestion {
     options: shuffled.map(String),
     correct: shuffled.indexOf(xv),
     explanation: `x_v = \u2212b \u00f7 2a = \u2212(${b}) \u00f7 (2\u00b7${a}) = ${-b} \u00f7 ${2 * a} = ${xv}`,
+  };
+}
+
+// ─── New Module 2 generators (visual + input) ────────────────────
+
+function genVertexY(): PracticeQuestion {
+  const a = pick([1, 2, -1, -2]);
+  const b = pick([-4, -2, 0, 2, 4]);
+  const c = pick([-3, -1, 0, 1, 3]);
+  const xv = -b / (2 * a);
+  const yv = a * xv * xv + b * xv + c;
+  return {
+    id: 'practice_vertex_y',
+    type: 'input',
+    prompt: `מה ה-y של הקודקוד של y = ${a}x² ${b >= 0 ? '+ ' + b : '− ' + Math.abs(b)}x ${c >= 0 ? '+ ' + c : '− ' + Math.abs(c)}?`,
+    inputAnswer: [String(yv), String(Math.round(yv * 100) / 100)],
+    inputPlaceholder: 'y_v = ...',
+    explanation: `x_v = ${xv}, y_v = f(${xv}) = ${yv}`,
+  };
+}
+
+function genMinMaxM2(): PracticeQuestion {
+  const a = pick([-3, -2, -1, 1, 2, 3]);
+  const b = pick([-4, -2, 0, 2, 4]);
+  const bStr = b === 0 ? '' : b > 0 ? ` + ${b}x` : ` − ${Math.abs(b)}x`;
+  const aStr = a === 1 ? '' : a === -1 ? '-' : String(a);
+  const correct = a > 0 ? 'מינימום (הכי נמוך)' : 'מקסימום (הכי גבוה)';
+  const opts = shuffle([correct, a > 0 ? 'מקסימום (הכי גבוה)' : 'מינימום (הכי נמוך)', 'תלוי ב-c', 'לא ניתן לדעת']);
+  return {
+    id: 'practice_minmax_m2',
+    prompt: `לפרבולה y = ${aStr}x²${bStr} — הקודקוד הוא:`,
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: a > 0
+      ? `a=${a} > 0 → פרבולה "מחייכת" → קודקוד = נקודת מינימום`
+      : `a=${a} < 0 → פרבולה "עצובה" → קודקוד = נקודת מקסימום`,
+  };
+}
+
+function genGraphToParabolaDir(): PracticeQuestion {
+  const a = pick([-2, -1, 1, 2]);
+  const b = pick([-4, -2, 0, 2, 4]);
+  const c = pick([-2, 0, 2]);
+  const correct = a > 0 ? 'a > 0' : 'a < 0';
+  const opts = shuffle([correct, a > 0 ? 'a < 0' : 'a > 0', 'a = 0', 'לא ניתן לדעת']);
+  return {
+    id: 'practice_graph_para_dir',
+    type: 'visual-mcq',
+    prompt: 'רואה פרבולה בגרף. מה סימן a?',
+    visualConfig: { type: 'parabola', a, bCoef: b, c },
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: a > 0
+      ? 'הפרבולה פתוחה למעלה "😊" → a > 0'
+      : 'הפרבולה פתוחה למטה "😢" → a < 0',
+  };
+}
+
+function genGraphToVertex(): PracticeQuestion {
+  const a = pick([1, -1, 2, -2]);
+  const xv = pick([-2, -1, 0, 1, 2]);
+  const yv = pick([-4, -2, 0, 2, 4]);
+  const b = -2 * a * xv;
+  const c = yv + a * xv * xv;
+  const correct = `(${xv}, ${yv})`;
+  const fakes = [
+    `(${xv + 1}, ${yv})`,
+    `(${xv}, ${yv + 1})`,
+    `(${-xv}, ${yv})`,
+  ].filter(f => f !== correct);
+  const opts = shuffle([correct, ...fakes.slice(0, 3)]);
+  return {
+    id: 'practice_graph_vertex',
+    type: 'visual-mcq',
+    prompt: 'מה קואורדינטות הקודקוד המסומן בגרף?',
+    visualConfig: { type: 'parabola', a, bCoef: b, c, labelPoints: [{ x: xv, y: yv, label: 'V' }] },
+    options: opts,
+    correct: opts.indexOf(correct),
+    explanation: `הקודקוד המסומן בגרף נמצא ב-x=${xv}, y=${yv}`,
   };
 }
 
@@ -443,8 +816,14 @@ function genVertexViaDerivative(): PracticeQuestion {
 }
 
 function generateQuestions(moduleId: number, count = 8): PracticeQuestion[] {
-  const pool1 = [genSlopeFromPoints, genIdentifySlope, genIdentifyIntercept, genLineDirection, genEquationFromMB];
-  const pool2 = [genParabolaDirection, genVertexX, genIdentifyIntercept, genSlopeFromPoints];
+  const pool1 = [
+    genSlopeFromPoints, genIdentifySlope, genIdentifyIntercept, genLineDirection, genEquationFromMB,
+    genGraphToSlope, genGraphToEquation, genPointsToEquation, genReverseIntercept, genGraphToIntercept, genPartialDataLine,
+  ];
+  const pool2 = [
+    genParabolaDirection, genVertexX,
+    genVertexY, genMinMaxM2, genGraphToParabolaDir, genGraphToVertex,
+  ];
   const pool3 = [genDiscriminant, genVertexXM3, genParabolaRange, genRootSign, genTrinomialFactoring, genQuadraticFormula, genMinMax, genMonotonicity];
   const pool4 = [genPowerRule, genPolyDerivative, genDerivativeAtPoint, genVertexViaDerivative];
   const poolMap: Record<number, (() => PracticeQuestion)[]> = { 1: pool1, 2: pool2, 3: pool3, 4: pool4 };
@@ -468,18 +847,32 @@ export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: 
   const [questions] = useState(() => generateQuestions(moduleId));
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
+  const [inputValue, setInputValue] = useState('');
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
 
   const q = questions[currentIdx];
-  const isCorrect = selected === q?.correct;
-  const answered = selected !== null;
+  const qType = q?.type ?? 'mcq';
+
+  const isMCQ = qType === 'mcq' || qType === 'visual-mcq';
+  const isInput = qType === 'input' || qType === 'visual-input';
+
+  const isCorrect = isMCQ ? (selected === q?.correct) : checkAnswer(inputValue, q?.inputAnswer || '');
+  const answered = isMCQ ? (selected !== null) : (inputValue.trim() !== '');
   const pct = Math.round(((currentIdx) / questions.length) * 100);
 
   const handleSelect = useCallback((idx: number) => {
     if (answered) return;
     setSelected(idx);
-    const correct = idx === q.correct;
+    const correct = idx === q?.correct;
+    if (correct) setScore(s => s + 1);
+    updateBox(q.id, moduleId, correct);
+  }, [answered, q, moduleId, updateBox]);
+
+  const handleInputSubmit = useCallback((input: string) => {
+    if (answered || !q) return;
+    setInputValue(input);
+    const correct = checkAnswer(input, q.inputAnswer || '');
     if (correct) setScore(s => s + 1);
     updateBox(q.id, moduleId, correct);
   }, [answered, q, moduleId, updateBox]);
@@ -490,6 +883,7 @@ export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: 
     } else {
       setCurrentIdx(i => i + 1);
       setSelected(null);
+      setInputValue('');
     }
   }
 
@@ -520,7 +914,7 @@ export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: 
               style={{ minHeight: 44 }}>
               חזרה
             </button>
-            <button onClick={() => { setCurrentIdx(0); setSelected(null); setScore(0); setDone(false); }}
+            <button onClick={() => { setCurrentIdx(0); setSelected(null); setInputValue(''); setScore(0); setDone(false); }}
               className="flex-1 font-black py-3 rounded-xl"
               style={{ minHeight: 44, background: '#fde403', color: '#484000' }}>
               שוב! 🔁
@@ -566,28 +960,43 @@ export default function PracticeMode({ moduleId, onBack, darkMode: _darkMode }: 
 
         {/* Question card */}
         <div className="bg-white dark:bg-[#1c1b1f] rounded-2xl border border-[#e0dbe3] dark:border-slate-700 p-6">
+          {/* Visual graph if present */}
+          {q?.visualConfig && <MiniGraph config={q.visualConfig} darkMode={_darkMode} />}
+
           <p className="font-bold text-lg text-right mb-5 text-[#2f2e32] dark:text-slate-100" dir="rtl">
             {renderPrompt(q.prompt)}
           </p>
 
-          <div className="flex flex-col gap-2.5">
-            {q.options.map((opt, i) => {
-              let style = 'border-[#e0dbe3] dark:border-slate-600 text-[#2f2e32] dark:text-slate-200 hover:border-[#34d399]';
-              if (answered) {
-                if (i === q.correct) style = 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300';
-                else if (i === selected) style = 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300';
-                else style = 'border-[#e0dbe3] dark:border-slate-700 opacity-40';
-              }
-              return (
-                <button key={i} onClick={() => handleSelect(i)} disabled={answered}
-                  className={`w-full border-2 rounded-xl px-4 py-3 font-semibold transition-all disabled:cursor-default ${style}`}
-                  style={{ minHeight: 48 }}
-                  dir={/^[a-zA-Z=\-\d\s().+*]+$/.test(opt.trim()) ? 'ltr' : 'rtl'}>
-                  {renderPrompt(opt)}
-                </button>
-              );
-            })}
-          </div>
+          {/* MCQ rendering */}
+          {isMCQ && q?.options && (
+            <div className="flex flex-col gap-2.5">
+              {q.options.map((opt, i) => {
+                let style = 'border-[#e0dbe3] dark:border-slate-600 text-[#2f2e32] dark:text-slate-200 hover:border-[#34d399]';
+                if (answered) {
+                  if (i === q.correct) style = 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300';
+                  else if (i === selected) style = 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300';
+                  else style = 'border-[#e0dbe3] dark:border-slate-700 opacity-40';
+                }
+                return (
+                  <button key={i} onClick={() => handleSelect(i)} disabled={answered}
+                    className={`w-full border-2 rounded-xl px-4 py-3 font-semibold transition-all disabled:cursor-default ${style}`}
+                    style={{ minHeight: 48 }}
+                    dir={/^[a-zA-Z=\-\d\s().+*]+$/.test(opt.trim()) ? 'ltr' : 'rtl'}>
+                    {renderPrompt(opt)}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Input rendering */}
+          {isInput && (
+            <InputAnswer
+              placeholder={q?.inputPlaceholder}
+              onSubmit={handleInputSubmit}
+              answered={answered}
+            />
+          )}
         </div>
 
         {/* Explanation + next */}
