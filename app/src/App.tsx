@@ -29,6 +29,9 @@ import module2 from './lessons/module-2-parabola.json';
 
 const modules: Lesson[] = [module1 as unknown as Lesson, module2 as unknown as Lesson];
 
+const MODULE3_TOTAL_STEPS = 10;
+const MODULE4_TOTAL_STEPS = 15;
+
 // ─── Hash Routing Helpers ─────────────────────────────────────────────────────
 
 type ActiveView =
@@ -65,6 +68,61 @@ function hashToView(hash: string): ActiveView {
   if (seg1 === 'derivatives') return { type: 'module3-player' };
   if (seg1 === 'teacher') return { type: 'teacher' };
   return { type: 'home' };
+}
+
+// ─── Module Card ──────────────────────────────────────────────────────────────
+
+interface ModuleCardProps {
+  moduleId: number;
+  title: string;
+  icon: string;
+  subtitle: string;
+  accent: string;
+  accentBg: string;
+  textOnAccent: string;
+  totalSteps: number;
+  currentStep: number;
+  completed: boolean;
+  onStart: () => void;
+  onPractice: () => void;
+}
+
+function ModuleCard({ moduleId, title, icon, subtitle, accent, accentBg, textOnAccent, totalSteps, currentStep, completed, onStart, onPractice }: ModuleCardProps) {
+  const pct = totalSteps > 1 ? Math.round((currentStep / (totalSteps - 1)) * 100) : 0;
+  return (
+    <div className="text-right bg-white dark:bg-[#1c1b1f] rounded-2xl p-4 sm:p-6 border border-[#e0dbe3] dark:border-slate-700/60 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 flex flex-col">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: accentBg, color: accent }}>
+          מודול {moduleId}
+        </span>
+        {completed && <span className="text-emerald-500">✅</span>}
+      </div>
+      <div className="text-4xl mb-3">{icon}</div>
+      <h2 className="text-xl font-bold mb-1 text-[#2f2e32] dark:text-slate-100">{title}</h2>
+      <p className="text-sm text-[#5d5b5f] dark:text-slate-400 mb-4">{subtitle}</p>
+      <div className="h-1.5 bg-[#ebe7ed] dark:bg-slate-700 rounded-full overflow-hidden mb-2">
+        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: `linear-gradient(90deg,${accent},#38bdf8)` }} />
+      </div>
+      <div className="flex justify-between items-center mb-4">
+        <span className="text-xs text-[#78767b] dark:text-slate-500">{currentStep} / {totalSteps} שלבים</span>
+      </div>
+      <div className="flex gap-2 mt-auto">
+        <button
+          onClick={onStart}
+          className="flex-1 font-black text-sm py-2.5 rounded-xl transition-all hover:opacity-90 hover:-translate-y-0.5"
+          style={{ background: accent, color: textOnAccent, minHeight: 44 }}
+        >
+          {currentStep > 0 ? 'המשך ←' : 'התחל ←'}
+        </button>
+        <button
+          onClick={onPractice}
+          title="מגרש תרגול"
+          className="px-3 py-2.5 rounded-xl border-2 border-[#e0dbe3] dark:border-slate-600 text-[#78767b] dark:text-slate-400 hover:border-current hover:text-[#2f2e32] dark:hover:text-slate-100 transition-all font-bold text-sm"
+          style={{ minHeight: 44 }}
+        >🏋️</button>
+      </div>
+    </div>
+  );
 }
 
 export default function App() {
@@ -116,11 +174,12 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setView({ type: 'teacher' })}
-              className="text-xs font-bold px-3 py-2 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/40 transition-colors hidden sm:flex items-center gap-1.5"
+              className="text-xs font-bold px-3 py-2 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/40 transition-colors flex items-center gap-1.5"
               style={{ minHeight: 36 }}
               title="לוח מורה — Leittner Insight"
             >
-              🏫 לוח מורה
+              <span>🏫</span>
+              <span className="hidden sm:inline">לוח מורה</span>
             </button>
             {confirmReset ? (
               <div className="flex items-center gap-2">
@@ -168,134 +227,67 @@ export default function App() {
             <span className="text-[#2f2e32] dark:text-slate-200">בשלבים קטנים</span>
           </h1>
           <p className="text-base text-[#5d5b5f] dark:text-slate-400 max-w-md mx-auto">כל מושג נלמד תחילה בעיניים — אחר כך עם נוסחה.</p>
-          <div className="mt-3 inline-block bg-[#fde403]/30 dark:bg-[#484000]/60 text-[#675c00] dark:text-[#fde403] text-xs font-bold px-3 py-1 rounded-full">
-            🔓 מצב פיתוח — כל המודולים פתוחים
-          </div>
+          {import.meta.env.DEV && (
+            <div className="mt-3 inline-block bg-[#fde403]/30 dark:bg-[#484000]/60 text-[#675c00] dark:text-[#fde403] text-xs font-bold px-3 py-1 rounded-full">
+              🔓 מצב פיתוח — כל המודולים פתוחים
+            </div>
+          )}
         </div>
 
         {/* Module Cards — Bento Grid */}
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-10">
           {modules.map((mod) => {
             const prog = progress[mod.moduleId];
-            const pct = prog ? Math.round((prog.step / (mod.steps.length - 1)) * 100) : 0;
             const isEmerald = mod.color === 'emerald';
             const accent = isEmerald ? '#34d399' : '#f59e0b';
-            const accentBg = isEmerald ? 'rgba(52,211,153,0.12)' : 'rgba(245,158,11,0.12)';
-
             return (
-              <div key={mod.moduleId}
-                className="text-right bg-white dark:bg-[#1c1b1f] rounded-2xl p-4 sm:p-6 border border-[#e0dbe3] dark:border-slate-700/60 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 flex flex-col"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: accentBg, color: accent }}>
-                    מודול {mod.moduleId}
-                  </span>
-                  {prog?.completed && <span className="text-emerald-500">✅</span>}
-                </div>
-                <div className="text-4xl mb-3">{mod.icon}</div>
-                <h2 className="text-xl font-bold mb-1 text-[#2f2e32] dark:text-slate-100">{mod.title}</h2>
-                <p className="text-sm text-[#5d5b5f] dark:text-slate-400 mb-4">{mod.steps.length} שלבים · שיטת לייטנר</p>
-                <div className="h-1.5 bg-[#ebe7ed] dark:bg-slate-700 rounded-full overflow-hidden mb-2">
-                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: `linear-gradient(90deg,${accent},#38bdf8)` }} />
-                </div>
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-xs text-[#78767b] dark:text-slate-500">{prog?.step ?? 0} / {mod.steps.length} שלבים</span>
-                </div>
-                {/* Action buttons */}
-                <div className="flex gap-2 mt-auto">
-                  <button
-                    onClick={() => setView({ type: 'module', lesson: mod })}
-                    className="flex-1 font-black text-sm py-2.5 rounded-xl transition-all hover:opacity-90 hover:-translate-y-0.5"
-                    style={{ background: accent, color: accent === '#34d399' ? '#014431' : '#402500', minHeight: 44 }}
-                  >
-                    {prog?.step ? 'המשך ←' : 'התחל ←'}
-                  </button>
-                  <button
-                    onClick={() => setView({ type: 'practice', moduleId: mod.moduleId })}
-                    title="מגרש תרגול"
-                    className="px-3 py-2.5 rounded-xl border-2 border-[#e0dbe3] dark:border-slate-600 text-[#78767b] dark:text-slate-400 hover:border-current hover:text-[#2f2e32] dark:hover:text-slate-100 transition-all font-bold text-sm"
-                    style={{ minHeight: 44 }}
-                  >
-                    🏋️
-                  </button>
-                </div>
-              </div>
+              <ModuleCard
+                key={mod.moduleId}
+                moduleId={mod.moduleId}
+                title={mod.title}
+                icon={mod.icon}
+                subtitle={`${mod.steps.length} שלבים · שיטת לייטנר`}
+                accent={accent}
+                accentBg={isEmerald ? 'rgba(52,211,153,0.12)' : 'rgba(245,158,11,0.12)'}
+                textOnAccent={isEmerald ? '#014431' : '#402500'}
+                totalSteps={mod.steps.length}
+                currentStep={prog?.step ?? 0}
+                completed={prog?.completed ?? false}
+                onStart={() => setView({ type: 'module', lesson: mod })}
+                onPractice={() => setView({ type: 'practice', moduleId: mod.moduleId })}
+              />
             );
           })}
 
-          {/* Module 3 — Investigation */}
-          {(() => {
-            const prog3 = progress[3];
-            const pct3 = prog3 ? Math.round((prog3.step / 9) * 100) : 0;
-            const accent3 = '#16a34a';
-            return (
-              <div className="text-right bg-white dark:bg-[#1c1b1f] rounded-2xl p-4 sm:p-6 border border-[#e0dbe3] dark:border-slate-700/60 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: 'rgba(22,163,74,0.12)', color: accent3 }}>מודול 3</span>
-                  {prog3?.completed && <span className="text-emerald-500">✅</span>}
-                </div>
-                <div className="text-4xl mb-3">🔬</div>
-                <h2 className="text-xl font-bold mb-1 text-[#2f2e32] dark:text-slate-100">חקירת הפרבולה</h2>
-                <p className="text-sm text-[#5d5b5f] dark:text-slate-400 mb-4">10 שלבים · שורשים, קיצון, תחומים</p>
-                <div className="h-1.5 bg-[#ebe7ed] dark:bg-slate-700 rounded-full overflow-hidden mb-2">
-                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct3}%`, background: `linear-gradient(90deg,${accent3},#34d399)` }} />
-                </div>
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-xs text-[#78767b] dark:text-slate-500">{prog3?.step ?? 0} / 10 שלבים</span>
-                </div>
-                <div className="flex gap-2 mt-auto">
-                  <button onClick={() => setView({ type: 'module3-investigation' })}
-                    className="flex-1 font-black text-sm py-2.5 rounded-xl transition-all hover:opacity-90 hover:-translate-y-0.5"
-                    style={{ background: accent3, color: '#fff', minHeight: 44 }}>
-                    {prog3?.step ? 'המשך ←' : 'התחל ←'}
-                  </button>
-                  <button
-                    onClick={() => setView({ type: 'practice', moduleId: 3 })}
-                    title="זירת תרגול"
-                    className="px-3 py-2.5 rounded-xl border-2 border-[#e0dbe3] dark:border-slate-600 text-[#78767b] dark:text-slate-400 hover:border-current hover:text-[#2f2e32] dark:hover:text-slate-100 transition-all font-bold text-sm"
-                    style={{ minHeight: 44 }}
-                  >🏋️</button>
-                </div>
-              </div>
-            );
-          })()}
+          <ModuleCard
+            moduleId={3}
+            title="חקירת הפרבולה"
+            icon="🔬"
+            subtitle={`${MODULE3_TOTAL_STEPS} שלבים · שורשים, קיצון, תחומים`}
+            accent="#16a34a"
+            accentBg="rgba(22,163,74,0.12)"
+            textOnAccent="#fff"
+            totalSteps={MODULE3_TOTAL_STEPS}
+            currentStep={progress[3]?.step ?? 0}
+            completed={progress[3]?.completed ?? false}
+            onStart={() => setView({ type: 'module3-investigation' })}
+            onPractice={() => setView({ type: 'practice', moduleId: 3 })}
+          />
 
-          {/* Module 4 — Derivatives */}
-          {(() => {
-            const prog4 = progress[4];
-            const pct4 = prog4 ? Math.round((prog4.step / 14) * 100) : 0;
-            const accent4 = '#6200EE';
-            return (
-              <div className="text-right bg-white dark:bg-[#1c1b1f] rounded-2xl p-4 sm:p-6 border border-[#e0dbe3] dark:border-slate-700/60 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#d9caff] dark:bg-[#3e009d]/40 text-[#3e009d] dark:text-[#ccb9ff]">מודול 4</span>
-                  {prog4?.completed && <span className="text-emerald-500">✅</span>}
-                </div>
-                <div className="text-4xl mb-3">📐</div>
-                <h2 className="text-xl font-bold mb-1 text-[#2f2e32] dark:text-slate-100">נגזרות</h2>
-                <p className="text-sm text-[#5d5b5f] dark:text-slate-400 mb-4">15 שלבים · ויזואלי עם זום</p>
-                <div className="h-1.5 bg-[#ebe7ed] dark:bg-slate-700 rounded-full overflow-hidden mb-2">
-                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct4}%`, background: `linear-gradient(90deg,${accent4},#a78bfa)` }} />
-                </div>
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-xs text-[#78767b] dark:text-slate-500">{prog4?.step ?? 0} / 15 שלבים</span>
-                </div>
-                <div className="flex gap-2 mt-auto">
-                  <button onClick={() => setView({ type: 'module3-player' })}
-                    className="flex-1 font-black text-sm py-2.5 rounded-xl transition-all hover:opacity-90 hover:-translate-y-0.5"
-                    style={{ background: accent4, color: '#fff', minHeight: 44 }}>
-                    {prog4?.step ? 'המשך ←' : 'התחל ←'}
-                  </button>
-                  <button
-                    onClick={() => setView({ type: 'practice', moduleId: 4 })}
-                    title="זירת תרגול"
-                    className="px-3 py-2.5 rounded-xl border-2 border-[#e0dbe3] dark:border-slate-600 text-[#78767b] dark:text-slate-400 hover:border-current hover:text-[#2f2e32] dark:hover:text-slate-100 transition-all font-bold text-sm"
-                    style={{ minHeight: 44 }}
-                  >🏋️</button>
-                </div>
-              </div>
-            );
-          })()}
+          <ModuleCard
+            moduleId={4}
+            title="נגזרות"
+            icon="📐"
+            subtitle={`${MODULE4_TOTAL_STEPS} שלבים · ויזואלי עם זום`}
+            accent="#6200EE"
+            accentBg="rgba(98,0,238,0.12)"
+            textOnAccent="#fff"
+            totalSteps={MODULE4_TOTAL_STEPS}
+            currentStep={progress[4]?.step ?? 0}
+            completed={progress[4]?.completed ?? false}
+            onStart={() => setView({ type: 'module3-player' })}
+            onPractice={() => setView({ type: 'practice', moduleId: 4 })}
+          />
         </div>
 
         {/* How Leitner works */}

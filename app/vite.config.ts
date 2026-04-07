@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig(() => ({
   plugins: [react()],
 
   build: {
@@ -9,12 +9,6 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     // esbuild minifier: fast and tree-shaking friendly
     minify: 'esbuild',
-  },
-
-  esbuild: {
-    // Strip console.* and debugger statements from production bundles only.
-    // In dev mode (npm run dev) logs are preserved for debugging.
-    drop: mode === 'production' ? (['console', 'debugger'] as const) : [],
   },
 
   preview: {
